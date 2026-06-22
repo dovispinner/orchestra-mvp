@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertis 3D — AI Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ──────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#fafbfc;color:#1a1a2e;line-height:1.6;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ── Palette ───────────────────────────────────────────── */
+:root{
+  --white:#ffffff;--bg:#fafbfc;--bg-alt:#f4f5f7;--border:#e5e7eb;
+  --text-primary:#0f172a;--text-secondary:#475569;--text-tertiary:#94a3b8;
+  --accent:#6366f1;--accent-light:#818cf8;--accent-ultra-light:#eef2ff;
+  --green:#22c55e;--amber:#f59e0b;--red:#ef4444;--cyan:#06b6d4;--purple:#a855f7;--gold:#d97706;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,.06);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.08);
+  --shadow-xl:0 16px 48px rgba(0,0,0,.1);
+  --radius:12px;--radius-lg:16px;--radius-xl:24px;
+}
+
+/* ── Utility ───────────────────────────────────────────── */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+@media(min-width:768px){.container{padding:0 40px}}
+@media(min-width:1024px){.container{padding:0 64px}}
+
+/* ── Reveal Animation ──────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+.reveal-delay-5{transition-delay:.5s}
+
+/* ── Section Titles ────────────────────────────────────── */
+.section-label{
+  font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:12px;
+}
+.section-title{
+  font-size:clamp(2rem,4vw,3rem);font-weight:800;color:var(--text-primary);
+  line-height:1.15;letter-spacing:-.03em;margin-bottom:12px;
+}
+.section-subtitle{
+  font-size:clamp(1rem,1.8vw,1.25rem);color:var(--text-secondary);
+  max-width:640px;line-height:1.7;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   1. HERO
+   ═══════════════════════════════════════════════════════════ */
+.hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:120px 24px 80px;overflow:hidden;background:var(--white);
+}
+.hero-orb{
+  position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(99,102,241,.18) 0%,rgba(99,102,241,.04) 50%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-55%);
+  animation:orbPulse 6s ease-in-out infinite;pointer-events:none;z-index:0;
+}
+@keyframes orbPulse{
+  0%,100%{transform:translate(-50%,-55%) scale(1);opacity:.8}
+  50%{transform:translate(-50%,-55%) scale(1.12);opacity:1}
+}
+.hero-content{position:relative;z-index:1;max-width:860px}
+.hero h1{
+  font-size:clamp(2.8rem,7vw,5rem);font-weight:800;letter-spacing:-.04em;
+  line-height:1.05;color:var(--text-primary);margin-bottom:24px;
+}
+.hero h1 span{
+  background:linear-gradient(135deg,var(--accent),var(--accent-light));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub{
+  font-size:clamp(1.05rem,2vw,1.35rem);color:var(--text-secondary);
+  max-width:680px;margin:0 auto 40px;line-height:1.75;font-weight:400;
+}
+.hero-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:56px}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;padding:16px 36px;
+  background:var(--accent);color:#fff;font-weight:600;font-size:1rem;
+  border-radius:999px;border:none;cursor:pointer;
+  box-shadow:0 4px 16px rgba(99,102,241,.35);
+  transition:all .25s ease;
+}
+.btn-primary:hover{background:#4f46e5;box-shadow:0 6px 24px rgba(99,102,241,.45);transform:translateY(-2px)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;padding:16px 36px;
+  background:transparent;color:var(--text-primary);font-weight:600;font-size:1rem;
+  border-radius:999px;border:1.5px solid var(--border);cursor:pointer;
+  transition:all .25s ease;
+}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.trust-bar{
+  display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;
+}
+.trust-bar span{
+  font-size:.85rem;font-weight:500;color:var(--text-tertiary);letter-spacing:.02em;
+}
+.trust-dot{width:4px;height:4px;border-radius:50%;background:var(--text-tertiary);opacity:.5}
+
+/* ═══════════════════════════════════════════════════════════
+   2. FLEET
+   ═══════════════════════════════════════════════════════════ */
+.fleet{padding:120px 0;background:var(--bg)}
+.fleet-header{text-align:center;margin-bottom:64px}
+.fleet-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;
+}
+.agent-card{
+  background:var(--white);border-radius:var(--radius-lg);padding:28px;
+  border:1px solid var(--border);transition:all .3s ease;position:relative;overflow:hidden;
+}
+.agent-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:transparent}
+.agent-card-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.agent-icon{
+  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;font-weight:700;flex-shrink:0;
+}
+.agent-icon.gold{background:rgba(217,119,6,.1);color:#d97706}
+.agent-icon.indigo{background:rgba(99,102,241,.1);color:#6366f1}
+.agent-icon.cyan{background:rgba(6,182,212,.1);color:#06b6d4}
+.agent-icon.green{background:rgba(34,197,94,.1);color:#22c55e}
+.agent-icon.red{background:rgba(239,68,68,.1);color:#ef4444}
+.agent-icon.purple{background:rgba(168,85,247,.1);color:#a855f7}
+.agent-name{font-size:1.1rem;font-weight:700;color:var(--text-primary)}
+.agent-role{font-size:.82rem;color:var(--text-secondary);font-weight:500}
+.agent-status{
+  display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;
+  padding:4px 12px;border-radius:999px;margin-bottom:12px;
+}
+.agent-status.online{background:rgba(34,197,94,.08);color:#16a34a}
+.agent-status.standby{background:rgba(245,158,11,.08);color:#d97706}
+.status-dot{width:7px;height:7px;border-radius:50%}
+.status-dot.online{background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.5)}
+.status-dot.standby{background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,.5)}
+.agent-desc{font-size:.92rem;color:var(--text-secondary);line-height:1.6}
+
+/* ═══════════════════════════════════════════════════════════
+   3. LIVE CONSOLE
+   ═══════════════════════════════════════════════════════════ */
+.console-section{padding:120px 0;background:var(--white)}
+.console-header{text-align:center;margin-bottom:56px}
+.terminal{
+  background:#0f172a;border-radius:var(--radius-xl);overflow:hidden;
+  box-shadow:var(--shadow-xl);max-width:820px;margin:0 auto;
+}
+.terminal-chrome{
+  display:flex;align-items:center;gap:8px;padding:16px 20px;
+  background:#1e293b;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.terminal-dot{width:12px;height:12px;border-radius:50%}
+.terminal-dot.r{background:#ef4444}.terminal-dot.y{background:#f59e0b}.terminal-dot.g{background:#22c55e}
+.terminal-title{
+  flex:1;text-align:center;font-family:'JetBrains Mono',monospace;
+  font-size:.75rem;color:rgba(255,255,255,.4);letter-spacing:.05em;
+}
+.terminal-body{
+  padding:24px;min-height:260px;font-family:'JetBrains Mono',monospace;
+  font-size:.82rem;line-height:2;color:rgba(255,255,255,.7);
+}
+.terminal-body .line{opacity:0;transform:translateX(-8px);transition:all .4s ease}
+.terminal-body .line.typed{opacity:1;transform:translateX(0)}
+.line .ts{color:rgba(255,255,255,.3)}
+.line .agent{font-weight:600}
+.line .agent.daemon{color:#d97706}
+.line .agent.forge{color:#818cf8}
+.line .agent.recon{color:#22c55e}
+.line .success{color:#22c55e}
+.line .progress{color:#818cf8}
+.line .info{color:var(--cyan)}
+
+/* ═══════════════════════════════════════════════════════════
+   4. ORCHESTRATION FEED
+   ═══════════════════════════════════════════════════════════ */
+.orchestration{padding:120px 0;background:var(--bg)}
+.orchestration-header{text-align:center;margin-bottom:64px}
+.timeline{max-width:640px;margin:0 auto;position:relative;padding-left:40px}
+.timeline::before{
+  content:'';position:absolute;left:15px;top:0;bottom:0;width:2px;
+  background:linear-gradient(to bottom,var(--accent-ultra-light),var(--accent),var(--accent-ultra-light));
+  border-radius:2px;
+}
+.tl-item{position:relative;margin-bottom:32px}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{
+  position:absolute;left:-33px;top:18px;width:12px;height:12px;border-radius:50%;
+  border:2.5px solid var(--accent);background:var(--white);z-index:1;
+}
+.tl-card{
+  background:var(--white);border-radius:var(--radius);padding:24px;
+  border:1px solid var(--border);transition:all .3s ease;
+}
+.tl-card:hover{box-shadow:var(--shadow-md);border-color:var(--accent-light)}
+.tl-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.tl-badge{
+  font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 10px;border-radius:999px;background:var(--accent-ultra-light);color:var(--accent);
+}
+.tl-time{font-size:.75rem;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace}
+.tl-title{font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.tl-desc{font-size:.88rem;color:var(--text-secondary);line-height:1.65}
+
+/* ═══════════════════════════════════════════════════════════
+   5. HITL TRUST LINE
+   ═══════════════════════════════════════════════════════════ */
+.hitl{padding:120px 0;background:var(--white)}
+.hitl-header{text-align:center;margin-bottom:56px}
+
+/* Flow Diagram */
+.flow{
+  display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;
+  margin-bottom:72px;padding:0 16px;
+}
+.flow-step{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:20px 16px;position:relative;flex:0 0 auto;
+}
+.flow-icon{
+  width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;margin-bottom:10px;background:var(--accent-ultra-light);color:var(--accent);
+  border:1.5px solid rgba(99,102,241,.15);
+}
+.flow-label{font-size:.82rem;font-weight:600;color:var(--text-primary);max-width:120px}
+.flow-arrow{
+  font-size:1.2rem;color:var(--text-tertiary);flex-shrink:0;margin:0 4px;
+  align-self:center;padding-bottom:22px;
+}
+@media(max-width:640px){
+  .flow{flex-direction:column;gap:4px}
+  .flow-arrow{transform:rotate(90deg);padding:0}
+}
+
+/* Trust Cards */
+.trust-cards{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;
+}
+.trust-card{
+  background:var(--bg);border-radius:var(--radius-lg);padding:32px;
+  border:1px solid var(--border);transition:all .3s ease;
+}
+.trust-card:hover{border-color:var(--accent-light);box-shadow:var(--shadow-sm)}
+.trust-card-num{
+  font-size:.75rem;font-weight:700;color:var(--accent);background:var(--accent-ultra-light);
+  width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+}
+.trust-card h3{font-size:1.05rem;font-weight:700;color:var(--text-primary);margin-bottom:8px}
+.trust-card p{font-size:.9rem;color:var(--text-secondary);line-height:1.65}
+
+/* ═══════════════════════════════════════════════════════════
+   6. FOOTER
+   ═══════════════════════════════════════════════════════════ */
+.footer{
+  padding:48px 24px;text-align:center;border-top:1px solid var(--border);
+  background:var(--bg);
+}
+.footer p{font-size:.85rem;color:var(--text-tertiary);letter-spacing:.02em}
+
+/* ── Responsive ────────────────────────────────────────── */
+@media(max-width:640px){
+  .hero{padding:100px 20px 60px}
+  .hero h1{font-size:2.4rem}
+  .fleet,.console-section,.orchestration,.hitl{padding:80px 0}
+  .fleet-grid{grid-template-columns:1fr}
+  .terminal-body{font-size:.72rem;padding:16px}
+  .trust-cards{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     1. HERO
+     ═══════════════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-orb" aria-hidden="true"></div>
+  <div class="hero-content">
+    <h1 class="reveal">The AI That <span>Runs The Business</span></h1>
+    <p class="hero-sub reveal reveal-delay-1">Not a chatbot that suggests. A native intelligence that communicates, decides, remembers, executes, and proves its work.</p>
+    <div class="hero-buttons reveal reveal-delay-2">
+      <button class="btn-primary" onclick="document.getElementById('console').scrollIntoView({behavior:'smooth'})">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        See It Live
+      </button>
+      <button class="btn-ghost" onclick="document.getElementById('hitl').scrollIntoView({behavior:'smooth'})">Read the Thesis</button>
+    </div>
+    <div class="trust-bar reveal reveal-delay-3">
+      <span>Stealth</span><span class="trust-dot" aria-hidden="true"></span>
+      <span>Live in Production</span><span class="trust-dot" aria-hidden="true"></span>
+      <span>Multi-Agent Fleet</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     2. THE FLEET
+     ═══════════════════════════════════════════════════════ -->
+<section class="fleet" id="fleet">
+  <div class="container">
+    <div class="fleet-header">
+      <p class="section-label reveal">The Fleet</p>
+      <h2 class="section-title reveal reveal-delay-1">Specialist agents, cryptographic identity,<br>two-way comms</h2>
+      <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto">Each agent is purpose-built, individually addressable, and accountable for its actions.</p>
+    </div>
+    <div class="fleet-grid">
+
+      <!-- Dæmon -->
+      <div class="agent-card reveal">
+        <div class="agent-card-top">
+          <div class="agent-icon gold">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Dæmon</div>
+            <div class="agent-role">Maestro · Root Intelligence</div>
+          </div>
+        </div>
+        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
+        <div class="agent-desc">Central orchestrator. Triages every request, assigns specialists, enforces human gates, and maintains the knowledge graph.</div>
+      </div>
+
+      <!-- Forge -->
+      <div class="agent-card reveal reveal-delay-1">
+        <div class="agent-card-top">
+          <div class="agent-icon indigo">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Forge</div>
+            <div class="agent-role">Dev Specialist · Engineering</div>
+          </div>
+        </div>
+        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
+        <div class="agent-desc">Writes, tests, and deploys production code. Manages CI/CD pipelines, serverless workers, and infrastructure.</div>
+      </div>
+
+      <!-- Daedalus -->
+      <div class="agent-card reveal reveal-delay-2">
+        <div class="agent-card-top">
+          <div class="agent-icon cyan">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Daedalus</div>
+            <div class="agent-role">Design & Visual QA</div>
+          </div>
+        </div>
+        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
+        <div class="agent-desc">Designs interfaces, audits visuals pixel-by-pixel, and enforces brand standards across every deliverable.</div>
+      </div>
+
+      <!-- Recon -->
+      <div class="agent-card reveal reveal-delay-3">
+        <div class="agent-card-top">
+          <div class="agent-icon green">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Recon</div>
+            <div class="agent-role">Intelligence & Research</div>
+          </div>
+        </div>
+        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
+        <div class="agent-desc">Sweeps open-source intel, monitors competitors, surfaces insights, and synthesizes research reports on demand.</div>
+      </div>
+
+      <!-- Sentinel -->
+      <div class="agent-card reveal reveal-delay-4">
+        <div class="agent-card-top">
+          <div class="agent-icon red">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Sentinel</div>
+            <div class="agent-role">Security & Compliance</div>
+          </div>
+        </div>
+        <div class="agent-status standby"><span class="status-dot standby"></span>Standby</div>
+        <div class="agent-desc">Monitors access patterns, audits permissions, enforces compliance rules, and flags anomalous agent behavior.</div>
+      </div>
+
+      <!-- Oracle -->
+      <div class="agent-card reveal reveal-delay-5">
+        <div class="agent-card-top">
+          <div class="agent-icon purple">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Oracle</div>
+            <div class="agent-role">Data & Analytics</div>
+          </div>
+        </div>
+        <div class="agent-status standby"><span class="status-dot standby"></span>Standby</div>
+        <div class="agent-desc">Queries databases, builds dashboards, generates business-intelligence reports, and surfaces actionable metrics.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     3. LIVE COMMAND CONSOLE
+     ═══════════════════════════════════════════════════════ -->
+<section class="console-section" id="console">
+  <div class="container">
+    <div class="console-header">
+      <p class="section-label reveal">Live Fleet Operations</p>
+      <h2 class="section-title reveal reveal-delay-1">Watch the fleet work<br>in real-time</h2>
+      <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto">Autonomous coordination between specialist agents — observed, not imagined.</p>
+    </div>
+    <div class="terminal reveal reveal-delay-3">
+      <div class="terminal-chrome">
+        <span class="terminal-dot r"></span>
+        <span class="terminal-dot y"></span>
+        <span class="terminal-dot g"></span>
+        <span class="terminal-title">fleet-ops — live</span>
+      </div>
+      <div class="terminal-body" id="terminalBody"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     4. ORCHESTRATION FEED
+     ═══════════════════════════════════════════════════════ -->
+<section class="orchestration" id="orchestration">
+  <div class="container">
+    <div class="orchestration-header">
+      <p class="section-label reveal">Orchestration in Motion</p>
+      <h2 class="section-title reveal reveal-delay-1">Multi-agent coordination,<br>not just chat</h2>
+      <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto">A real task moving through the fleet — from intake to verified delivery.</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <span class="tl-badge">Intake</span>
+            <span class="tl-time">09:41:20</span>
+          </div>
+          <div class="tl-title">Task Received</div>
+          <div class="tl-desc">Dæmon receives a natural-language request: "Deploy the flybuy-relay hotfix and verify it's live." Parses intent, identifies required agents.</div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-1">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <span class="tl-badge">Triage</span>
+            <span class="tl-time">09:41:21</span>
+          </div>
+          <div class="tl-title">Maestro Routes to Specialist</div>
+          <div class="tl-desc">Dæmon determines this is a deployment task and assigns Forge as primary, with Sentinel on standby for post-deploy audit.</div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-2">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <span class="tl-badge">Execute</span>
+            <span class="tl-time">09:41:22</span>
+          </div>
+          <div class="tl-title">Specialist Builds & Deploys</div>
+          <div class="tl-desc">Forge pulls latest code, runs CI pipeline, deploys to Cloudflare Workers, and verifies the endpoint responds with 200 OK.</div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-3">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <span class="tl-badge">Cross-Check</span>
+            <span class="tl-time">09:41:26</span>
+          </div>
+          <div class="tl-title">Second Agent Audits</div>
+          <div class="tl-desc">Sentinel runs a post-deploy security scan. Confirms no exposed secrets, valid TLS, and clean access logs. Signs off.</div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-4">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <span class="tl-badge" style="background:rgba(245,158,11,.1);color:#d97706">Human Gate</span>
+            <span class="tl-time">09:41:28</span>
+          </div>
+          <div class="tl-title">Awaiting Human Approval</div>
+          <div class="tl-desc">Before sending the deployment notification externally, the fleet pauses and requests explicit human approval. Nothing leaves without a green light.</div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-5">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <span class="tl-badge" style="background:rgba(34,197,94,.1);color:#16a34a">Complete</span>
+            <span class="tl-time">09:41:32</span>
+          </div>
+          <div class="tl-title">Result Delivered, Memory Updated</div>
+          <div class="tl-desc">Task marked complete. Dæmon updates the knowledge graph with deployment metadata. Fleet returns to ready state.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     5. HITL TRUST LINE
+     ═══════════════════════════════════════════════════════ -->
+<section class="hitl" id="hitl">
+  <div class="container">
+    <div class="hitl-header">
+      <p class="section-label reveal">Human-in-the-Loop by Design</p>
+      <h2 class="section-title reveal reveal-delay-1">Power that's granted,<br>not held</h2>
+      <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto">Autonomy with accountability. Every external action requires explicit human authorization.</p>
+    </div>
+
+    <!-- Flow Diagram -->
+    <div class="flow reveal reveal-delay-3">
+      <div class="flow-step">
+        <div class="flow-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <span class="flow-label">Agent proposes action</span>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(245,158,11,.08);color:#d97706;border-color:rgba(245,158,11,.2)">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <span class="flow-label">Review gate</span>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(34,197,94,.08);color:#16a34a;border-color:rgba(34,197,94,.2)">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <span class="flow-label">Human approves or rejects</span>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="flow-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <span class="flow-label">Action executes</span>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(168,85,247,.08);color:#a855f7;border-color:rgba(168,85,247,.2)">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <span class="flow-label">Full audit trail</span>
+      </div>
+    </div>
+
+    <!-- Trust Principle Cards -->
+    <div class="trust-cards">
+      <div class="trust-card reveal">
+        <div class="trust-card-num">1</div>
+        <h3>Nothing goes external without approval</h3>
+        <p>Emails, messages, deployments, and API calls to external services are gated. The fleet proposes; the human decides.</p>
+      </div>
+      <div class="trust-card reveal reveal-delay-1">
+        <div class="trust-card-num">2</div>
+        <h3>Every action is signed and traceable</h3>
+        <p>Who asked, which agent executed, under what authority, and when. A complete chain of custody for every operation.</p>
+      </div>
+      <div class="trust-card reveal reveal-delay-2">
+        <div class="trust-card-num">3</div>
+        <h3>Reversible first</h3>
+        <p>When uncertain, prefer the action that can be undone. Destructive operations require additional confirmation gates.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     6. FOOTER
+     ═══════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <p>Vertis 3D Inc. · Stealth · 2026</p>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════════════ -->
+<script>
+/* ── IntersectionObserver Reveal ──────────────────────── */
+(function(){
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+})();
+
+/* ── Terminal Typing Effect ──────────────────────────── */
+(function(){
+  const lines = [
+    {ts:'09:41:22',parts:[
+      {text:'Dæmon',cls:'agent daemon'},{text:' → ',cls:''},{text:'Forge',cls:'agent forge'},
+      {text:': Deploy flybuy-relay hotfix to production',cls:''}
+    ]},
+    {ts:'09:41:23',parts:[
+      {text:'Forge',cls:'agent forge'},{text:': Building... ',cls:''},
+      {text:'████████░░ 80%',cls:'progress'}
+    ]},
+    {ts:'09:41:25',parts:[
+      {text:'Forge',cls:'agent forge'},{text:' → ',cls:''},{text:'Dæmon',cls:'agent daemon'},
+      {text:': Deployed. Worker live at flybuy-relay.vertis3d.workers.dev ',cls:''},
+      {text:'✓',cls:'success'}
+    ]},
+    {ts:'09:41:26',parts:[
+      {text:'Dæmon',cls:'agent daemon'},{text:' → ',cls:''},{text:'Recon',cls:'agent recon'},
+      {text:': Sweep competitive intel — challenge coin market Q2',cls:''}
+    ]},
+    {ts:'09:41:28',parts:[
+      {text:'Recon',cls:'agent recon'},
+      {text:': Scanning 48 sources... ',cls:''},
+      {text:'found 12 new signals',cls:'info'}
+    ]},
+    {ts:'09:41:30',parts:[
+      {text:'Dæmon',cls:'agent daemon'},
+      {text:': All tasks nominal. Fleet health: ',cls:''},
+      {text:'6/6 agents responsive.',cls:'success'}
+    ]},
+  ];
+
+  const body = document.getElementById('terminalBody');
+  let currentCycle = 0;
+
+  function buildLine(data){
+    const div = document.createElement('div');
+    div.className = 'line';
+    const ts = document.createElement('span');
+    ts.className = 'ts';
+    ts.textContent = '[' + data.ts + '] ';
+    div.appendChild(ts);
+    data.parts.forEach(p=>{
+      const s = document.createElement('span');
+      if(p.cls) s.className = p.cls;
+      s.textContent = p.text;
+      div.appendChild(s);
+    });
+    return div;
+  }
+
+  function runCycle(){
+    body.innerHTML = '';
+    lines.forEach((l,i)=>{
+      const el = buildLine(l);
+      body.appendChild(el);
+      setTimeout(()=>el.classList.add('typed'), 400 * (i + 1));
+    });
+    currentCycle++;
+  }
+
+  // Start when terminal scrolls into view
+  const termObs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        runCycle();
+        setInterval(runCycle, (lines.length * 400) + 3000);
+        termObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.3});
+  termObs.observe(body.parentElement);
+})();
+</script>
+</body>
+</html>
