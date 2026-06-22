@@ -108,6 +108,26 @@
   footer{border-top:1px solid var(--line);padding:50px 0;text-align:center;color:var(--mut);font-size:13px}
   .foot-cta{margin-bottom:26px}
   .foot-cta h3{font-size:clamp(1.5rem,3.5vw,2.1rem);color:var(--ink);font-weight:800;margin-bottom:18px}
+
+/* ── LIVE MODE Toggle ── */
+.live-wrap{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.live-sw{position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;}
+.live-sw input{opacity:0;width:0;height:0;}
+.live-sw .sl{position:absolute;inset:0;background:#333;border-radius:24px;transition:.3s;}
+.live-sw .sl:before{content:"";position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#888;border-radius:50%;transition:.3s;}
+.live-sw input:checked+.sl{background:#0a3;box-shadow:0 0 12px #0a3;}
+.live-sw input:checked+.sl:before{transform:translateX(20px);background:#fff;}
+.live-tag{font-size:10px;letter-spacing:3px;color:#555;font-weight:700;transition:.3s;}
+.live-tag.on{color:#0a3;text-shadow:0 0 8px #0a3;}
+.live-pulse{display:none;width:8px;height:8px;border-radius:50%;background:#0a3;animation:lpulse 1.2s infinite;}
+.live-tag.on~.live-pulse{display:block;}
+@keyframes lpulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
+.typing-dots{display:inline-block;}
+.typing-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#0a3;margin:0 2px;animation:tdot 1.4s infinite;}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes tdot{0%,80%,100%{opacity:.3;transform:translateY(0);}40%{opacity:1;transform:translateY(-6px);}}
+
 </style>
 </head>
 <body>
@@ -284,6 +304,66 @@
     inp.disabled=false; inp.focus();
   }
   document.getElementById('cmd').addEventListener('keydown',function(e){if(e.key==='Enter')sendCmd();});
+
+
+// ── LIVE MODE ──
+const LIVE_API='https://orchestra-live-relay.vertis3d.workers.dev';
+const liveToggle=document.getElementById('liveToggle');
+const liveTag=document.getElementById('liveTag');
+const livePulse=document.getElementById('livePulse');
+let liveMode=false;
+liveToggle.addEventListener('change',function(){
+  liveMode=liveToggle.checked;
+  liveTag.className=liveMode?'live-tag on':'live-tag';
+  livePulse.style.display=liveMode?'block':'none';
+});
+
+// Override sendCmd to support dual mode
+const _origSendCmd = sendCmd;
+sendCmd = async function(){
+  if(!liveMode) return _origSendCmd();
+  const inp=document.getElementById('cmd');
+  const v=inp.value.trim(); if(!v)return;
+  add('You',v,true); inp.value='';
+  inp.disabled=true;
+  add('System','<span class="typing-dots"><span></span><span></span><span></span></span> Dispatching to live orchestra\u2026',false);
+  try {
+    const res=await fetch(LIVE_API+'/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:v,target_agent:'auto'})});
+    const data=await res.json();
+    if(!data.knock_id) throw new Error('no knock_id');
+    let lastCount=0, attempts=0;
+    const poll=setInterval(async()=>{
+      attempts++;
+      try {
+        const pr=await fetch(LIVE_API+'/poll/'+data.knock_id);
+        const pd=await pr.json();
+        if(pd.answers && pd.answers.length>lastCount){
+          // Remove typing indicator on first real answer
+          if(lastCount===0){const t=conBody.lastChild;if(t&&t.textContent.includes('Dispatching'))t.remove();}
+          for(let i=lastCount;i<pd.answers.length;i++){
+            add(pd.answers[i].from_agent,pd.answers[i].answer,false);
+          }
+          lastCount=pd.answers.length;
+        }
+        if(pd.status==='complete'||attempts>=30){
+          clearInterval(poll);
+          if(attempts>=30&&lastCount===0){
+            const t=conBody.lastChild;if(t&&t.textContent.includes('Dispatching'))t.remove();
+            add('System','Live response timed out \u2014 agents may still be processing. Try again or switch to simulated mode.',false);
+          }
+          inp.disabled=false;inp.focus();
+        }
+      }catch(e){
+        if(attempts>=30){clearInterval(poll);inp.disabled=false;inp.focus();}
+      }
+    },2000);
+  } catch(e) {
+    const t=conBody.lastChild;if(t&&t.textContent.includes('Dispatching'))t.remove();
+    add('System','Could not reach live relay \u2014 falling back to simulated mode.',false);
+    liveMode=false; liveToggle.checked=false; liveTag.className='live-tag'; livePulse.style.display='none';
+    inp.disabled=false; inp.focus();
+  }
+};
 
 </script>
 </body>
