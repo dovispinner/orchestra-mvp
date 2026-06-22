@@ -135,6 +135,7 @@ a{text-decoration:none;color:inherit}
 .agent-icon.green{background:rgba(34,197,94,.1);color:#22c55e}
 .agent-icon.red{background:rgba(239,68,68,.1);color:#ef4444}
 .agent-icon.purple{background:rgba(168,85,247,.1);color:#a855f7}
+.agent-icon.amber{background:rgba(245,158,11,.1);color:#d97706}
 .agent-name{font-size:1.1rem;font-weight:700;color:var(--text-primary)}
 .agent-role{font-size:.82rem;color:var(--text-secondary);font-weight:500}
 .agent-status{
@@ -312,8 +313,8 @@ a{text-decoration:none;color:inherit}
   <div class="container">
     <div class="fleet-header">
       <p class="section-label reveal">The Fleet</p>
-      <h2 class="section-title reveal reveal-delay-1">Specialist agents, cryptographic identity,<br>two-way comms</h2>
-      <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto">Each agent is purpose-built, individually addressable, and accountable for its actions.</p>
+      <h2 class="section-title reveal reveal-delay-1">Specialist agents, individually addressable,<br>human-gated</h2>
+      <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto">Each agent is purpose-built, scoped to its domain, and accountable for its actions. Authority boundaries enforced at the gateway with least-privilege gating. Cryptographic identity verification on the roadmap.</p>
     </div>
     <div class="fleet-grid">
 
@@ -332,79 +333,79 @@ a{text-decoration:none;color:inherit}
         <div class="agent-desc">Central orchestrator. Triages every request, assigns specialists, enforces human gates, and maintains the knowledge graph.</div>
       </div>
 
-      <!-- Forge -->
+      <!-- Daedalus -->
       <div class="agent-card reveal reveal-delay-1">
+        <div class="agent-card-top">
+          <div class="agent-icon cyan">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="currentColor"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Daedalus</div>
+            <div class="agent-role">2nd-in-Command · Orchestration &amp; Build</div>
+          </div>
+        </div>
+        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
+        <div class="agent-desc">Second-in-command. Designs interfaces, builds visual systems, audits deliverables pixel-by-pixel, and enforces brand standards.</div>
+      </div>
+
+      <!-- Pharos -->
+      <div class="agent-card reveal reveal-delay-2">
+        <div class="agent-card-top">
+          <div class="agent-icon green">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Pharos</div>
+            <div class="agent-role">Recon &amp; Security · Head of Recon (001)</div>
+          </div>
+        </div>
+        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
+        <div class="agent-desc">Sweeps open-source intel, monitors threats, hardens the stack.</div>
+      </div>
+
+      <!-- Scout -->
+      <div class="agent-card reveal reveal-delay-3">
+        <div class="agent-card-top">
+          <div class="agent-icon amber">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Scout</div>
+            <div class="agent-role">Field Recon (002)</div>
+          </div>
+        </div>
+        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
+        <div class="agent-desc">Deep-dive reconnaissance on detached special missions; surfaces ground truth.</div>
+      </div>
+
+      <!-- Le Chef -->
+      <div class="agent-card reveal reveal-delay-4">
+        <div class="agent-card-top">
+          <div class="agent-icon purple">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          </div>
+          <div>
+            <div class="agent-name">Le Chef</div>
+            <div class="agent-role">Coherence &amp; Integration · Standards</div>
+          </div>
+        </div>
+        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
+        <div class="agent-desc">Lives in the seams between units — keeps every agent speaking one language; owns routing standards and cross-unit compounding.</div>
+      </div>
+
+      <!-- Forge -->
+      <div class="agent-card reveal reveal-delay-5">
         <div class="agent-card-top">
           <div class="agent-icon indigo">
             <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           </div>
           <div>
             <div class="agent-name">Forge</div>
-            <div class="agent-role">Dev Specialist · Engineering</div>
+            <div class="agent-role">Builder · Fabrication</div>
           </div>
         </div>
         <div class="agent-status online"><span class="status-dot online"></span>Online</div>
         <div class="agent-desc">Writes, tests, and deploys production code. Manages CI/CD pipelines, serverless workers, and infrastructure.</div>
-      </div>
-
-      <!-- Daedalus -->
-      <div class="agent-card reveal reveal-delay-2">
-        <div class="agent-card-top">
-          <div class="agent-icon cyan">
-            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          </div>
-          <div>
-            <div class="agent-name">Daedalus</div>
-            <div class="agent-role">Design & Visual QA</div>
-          </div>
-        </div>
-        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
-        <div class="agent-desc">Designs interfaces, audits visuals pixel-by-pixel, and enforces brand standards across every deliverable.</div>
-      </div>
-
-      <!-- Recon -->
-      <div class="agent-card reveal reveal-delay-3">
-        <div class="agent-card-top">
-          <div class="agent-icon green">
-            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </div>
-          <div>
-            <div class="agent-name">Recon</div>
-            <div class="agent-role">Intelligence & Research</div>
-          </div>
-        </div>
-        <div class="agent-status online"><span class="status-dot online"></span>Online</div>
-        <div class="agent-desc">Sweeps open-source intel, monitors competitors, surfaces insights, and synthesizes research reports on demand.</div>
-      </div>
-
-      <!-- Sentinel -->
-      <div class="agent-card reveal reveal-delay-4">
-        <div class="agent-card-top">
-          <div class="agent-icon red">
-            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div>
-            <div class="agent-name">Sentinel</div>
-            <div class="agent-role">Security & Compliance</div>
-          </div>
-        </div>
-        <div class="agent-status standby"><span class="status-dot standby"></span>Standby</div>
-        <div class="agent-desc">Monitors access patterns, audits permissions, enforces compliance rules, and flags anomalous agent behavior.</div>
-      </div>
-
-      <!-- Oracle -->
-      <div class="agent-card reveal reveal-delay-5">
-        <div class="agent-card-top">
-          <div class="agent-icon purple">
-            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-          </div>
-          <div>
-            <div class="agent-name">Oracle</div>
-            <div class="agent-role">Data & Analytics</div>
-          </div>
-        </div>
-        <div class="agent-status standby"><span class="status-dot standby"></span>Standby</div>
-        <div class="agent-desc">Queries databases, builds dashboards, generates business-intelligence reports, and surfaces actionable metrics.</div>
       </div>
 
     </div>
@@ -465,7 +466,7 @@ a{text-decoration:none;color:inherit}
             <span class="tl-time">09:41:21</span>
           </div>
           <div class="tl-title">Maestro Routes to Specialist</div>
-          <div class="tl-desc">Dæmon determines this is a deployment task and assigns Forge as primary, with Sentinel on standby for post-deploy audit.</div>
+          <div class="tl-desc">Dæmon determines this is a deployment task and assigns Forge as primary, with Pharos on standby for post-deploy audit.</div>
         </div>
       </div>
 
@@ -489,7 +490,7 @@ a{text-decoration:none;color:inherit}
             <span class="tl-time">09:41:26</span>
           </div>
           <div class="tl-title">Second Agent Audits</div>
-          <div class="tl-desc">Sentinel runs a post-deploy security scan. Confirms no exposed secrets, valid TLS, and clean access logs. Signs off.</div>
+          <div class="tl-desc">Pharos runs a post-deploy security scan. Confirms no exposed secrets, valid TLS, and clean access logs. Signs off.</div>
         </div>
       </div>
 
@@ -579,8 +580,8 @@ a{text-decoration:none;color:inherit}
       </div>
       <div class="trust-card reveal reveal-delay-1">
         <div class="trust-card-num">2</div>
-        <h3>Every action is signed and traceable</h3>
-        <p>Who asked, which agent executed, under what authority, and when. A complete chain of custody for every operation.</p>
+        <h3>Authority boundaries at the gateway</h3>
+        <p>Scoped agent identity with least-privilege gating, HITL approval, and tenant isolation — all live now. Cryptographic signing and key rotation are on the roadmap.</p>
       </div>
       <div class="trust-card reveal reveal-delay-2">
         <div class="trust-card-num">3</div>
@@ -629,11 +630,11 @@ a{text-decoration:none;color:inherit}
       {text:'✓',cls:'success'}
     ]},
     {ts:'09:41:26',parts:[
-      {text:'Dæmon',cls:'agent daemon'},{text:' → ',cls:''},{text:'Recon',cls:'agent recon'},
+      {text:'Dæmon',cls:'agent daemon'},{text:' → ',cls:''},{text:'Pharos',cls:'agent recon'},
       {text:': Sweep competitive intel — challenge coin market Q2',cls:''}
     ]},
     {ts:'09:41:28',parts:[
-      {text:'Recon',cls:'agent recon'},
+      {text:'Pharos',cls:'agent recon'},
       {text:': Scanning 48 sources... ',cls:''},
       {text:'found 12 new signals',cls:'info'}
     ]},
