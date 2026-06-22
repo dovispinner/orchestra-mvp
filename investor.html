@@ -226,7 +226,6 @@
 </div>
 
 <script>
-const RELAY="https://webhooks.tasklet.ai/v1/public/webhook/a_6z2xq6xzmx8wpecpytt7?token=19dd319b52730827e4215f2b8e0b4fbb";
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 function sendCmd(){
   const t=document.getElementById('cmd');const v=t.value.trim();if(!v)return;
@@ -234,8 +233,7 @@ function sendCmd(){
   feed.insertAdjacentHTML('afterbegin',
     '<div class="msg you"><div class="who">🧑 You · just now</div>'+esc(v)+'</div>');
   t.value='';
-  try{fetch(RELAY,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({from:'Investor Demo UI',action:'command',message:v,priority:'high'})});}catch(e){}
+  // cosmetic demo only — relay decoupled for safety (no outbound calls)
   setTimeout(()=>{feed.insertAdjacentHTML('afterbegin',
     '<div class="msg"><div class="who">◆ Daedalus · routing</div><span class="ok">✓ Relayed to the fleet.</span> Daedalus is triaging and will assign the right agents. You\'ll get the result back here.</div>');},650);
 }
