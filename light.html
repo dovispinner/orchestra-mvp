@@ -134,6 +134,26 @@
   footer{border-top:1px solid var(--line);padding:48px 0;margin-top:30px}
   footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
   footer .muted{color:var(--gray);font-size:13px;font-family:var(--mono)}
+
+/* ── LIVE MODE Toggle ── */
+.live-wrap{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.live-sw{position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;}
+.live-sw input{opacity:0;width:0;height:0;}
+.live-sw .sl{position:absolute;inset:0;background:#333;border-radius:24px;transition:.3s;}
+.live-sw .sl:before{content:"";position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#888;border-radius:50%;transition:.3s;}
+.live-sw input:checked+.sl{background:#0a3;box-shadow:0 0 12px #0a3;}
+.live-sw input:checked+.sl:before{transform:translateX(20px);background:#fff;}
+.live-tag{font-size:10px;letter-spacing:3px;color:#555;font-weight:700;transition:.3s;}
+.live-tag.on{color:#0a3;text-shadow:0 0 8px #0a3;}
+.live-pulse{display:none;width:8px;height:8px;border-radius:50%;background:#0a3;animation:lpulse 1.2s infinite;}
+.live-tag.on~.live-pulse{display:block;}
+@keyframes lpulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
+.typing-dots{display:inline-block;}
+.typing-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#0a3;margin:0 2px;animation:tdot 1.4s infinite;}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes tdot{0%,80%,100%{opacity:.3;transform:translateY(0);}40%{opacity:1;transform:translateY(-6px);}}
+
 </style>
 </head>
 <body>
@@ -295,6 +315,64 @@ async function send(){
 }
 cmd.addEventListener('keydown',function(e){if(e.key==='Enter')send();});
 setInterval(function(){document.querySelectorAll('.track i').forEach(function(b){var w=parseInt(b.style.width);w+=(Math.random()*10-5);w=Math.max(28,Math.min(95,w));b.style.width=w+'%';});},2600);
+
+
+// ── LIVE MODE ──
+const LIVE_API='https://orchestra-live-relay.vertis3d.workers.dev';
+const liveToggle=document.getElementById('liveToggle');
+const liveTag=document.getElementById('liveTag');
+const livePulse=document.getElementById('livePulse');
+let liveMode=false;
+liveToggle.addEventListener('change',function(){
+  liveMode=liveToggle.checked;
+  liveTag.className=liveMode?'live-tag on':'live-tag';
+  livePulse.style.display=liveMode?'block':'none';
+});
+
+// Override send to support dual mode
+const _origSend = send;
+send = async function(){
+  if(!liveMode) return _origSend();
+  const v=cmd.value.trim(); if(!v)return;
+  line('you','',v); cmd.value='';
+  cmd.disabled=true;
+  line('system','sys dim','<span class="typing-dots"><span></span><span></span><span></span></span> Dispatching to live orchestra\u2026');
+  try {
+    const res=await fetch(LIVE_API+'/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:v,target_agent:'auto'})});
+    const data=await res.json();
+    if(!data.knock_id) throw new Error('no knock_id');
+    let lastCount=0, attempts=0;
+    const poll=setInterval(async()=>{
+      attempts++;
+      try {
+        const pr=await fetch(LIVE_API+'/poll/'+data.knock_id);
+        const pd=await pr.json();
+        if(pd.answers && pd.answers.length>lastCount){
+          if(lastCount===0){const t=feed.lastChild;if(t&&t.textContent.includes('Dispatching'))t.remove();}
+          for(let i=lastCount;i<pd.answers.length;i++){
+            line(pd.answers[i].from_agent,pd.answers[i].from_agent.toLowerCase(),pd.answers[i].answer);
+          }
+          lastCount=pd.answers.length;
+        }
+        if(pd.status==='complete'||attempts>=30){
+          clearInterval(poll);
+          if(attempts>=30&&lastCount===0){
+            const t=feed.lastChild;if(t&&t.textContent.includes('Dispatching'))t.remove();
+            line('system','sys dim','Live response timed out \u2014 agents may still be processing.');
+          }
+          cmd.disabled=false;cmd.focus();
+        }
+      }catch(e){
+        if(attempts>=30){clearInterval(poll);cmd.disabled=false;cmd.focus();}
+      }
+    },2000);
+  } catch(e) {
+    const t=feed.lastChild;if(t&&t.textContent.includes('Dispatching'))t.remove();
+    line('system','sys dim','Could not reach live relay \u2014 falling back to simulated mode.');
+    liveMode=false; liveToggle.checked=false; liveTag.className='live-tag'; livePulse.style.display='none';
+    cmd.disabled=false; cmd.focus();
+  }
+};
 
 </script>
 </body>
