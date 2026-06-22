@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orchestra — AI Workforce Platform</title>
+<style>
+  :root{
+    --bg:#0b0f14; --panel:rgba(255,255,255,.04); --panel-solid:#11161d;
+    --line:rgba(255,255,255,.08); --ink:#e8edf2; --muted:#8a97a6;
+    --green:#36e0a4; --green-dim:rgba(54,224,164,.14); --amber:#ffc658; --blue:#5aa9ff;
+    --radius:16px; --shadow:0 20px 60px rgba(0,0,0,.45);
+    --font:'-apple-system',BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1200px 600px at 80% -10%,rgba(90,169,255,.10),transparent),
+       radial-gradient(900px 500px at 0% 110%,rgba(54,224,164,.08),transparent),var(--bg);
+       color:var(--ink);font-family:var(--font);min-height:100vh;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+
+  .topbar{display:flex;align-items:center;gap:18px;padding:14px 22px;
+    border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;
+    background:rgba(11,15,20,.72);backdrop-filter:blur(14px)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+  .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--blue));
+    display:grid;place-items:center;font-size:16px;box-shadow:0 6px 18px rgba(54,224,164,.35)}
+  .ws-switch{display:flex;align-items:center;gap:8px;margin-left:8px;padding:6px 12px;border:1px solid var(--line);
+    border-radius:10px;font-size:13px;color:var(--muted);background:var(--panel)}
+  .ws-switch b{color:var(--ink)}
+  .top-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .pill{font-size:12px;padding:5px 11px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+  .pill .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;
+    box-shadow:0 0 0 0 rgba(54,224,164,.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(54,224,164,.5)}70%{box-shadow:0 0 0 7px rgba(54,224,164,0)}100%{box-shadow:0 0 0 0 rgba(54,224,164,0)}}
+  .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#5aa9ff,#8a7bff);
+    display:grid;place-items:center;font-weight:700;font-size:13px}
+
+  .app{display:grid;grid-template-columns:240px 1fr 320px;gap:18px;padding:18px 22px;max-width:1480px;margin:0 auto}
+  .col{display:flex;flex-direction:column;gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;
+    backdrop-filter:blur(8px)}
+  .card h3{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px;font-weight:700}
+
+  .agent{display:flex;align-items:center;gap:11px;padding:9px 8px;border-radius:11px;cursor:pointer;transition:.15s}
+  .agent:hover{background:var(--panel)}
+  .agent.active{background:var(--green-dim);border:1px solid rgba(54,224,164,.25)}
+  .ava{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
+  .agent .meta{min-width:0}
+  .agent .nm{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .agent .rl{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sdot{width:8px;height:8px;border-radius:50%;margin-left:auto;flex:none}
+  .s-on{background:var(--green)} .s-busy{background:var(--amber)} .s-idle{background:var(--muted)}
+
+  .navlink{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;color:var(--muted);font-size:14px;cursor:pointer}
+  .navlink:hover{background:var(--panel);color:var(--ink)}
+  .navlink.on{background:var(--panel);color:var(--ink)}
+
+  .hero-row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+  .kpi{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .kpi .v{font-size:26px;font-weight:800;letter-spacing:-.5px}
+  .kpi .l{font-size:12px;color:var(--muted);margin-top:3px}
+  .kpi .v small{font-size:13px;color:var(--green);font-weight:700;margin-left:6px}
+
+  .mission{display:flex;align-items:center;gap:14px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;margin-bottom:10px;background:var(--panel-solid)}
+  .mission:last-child{margin-bottom:0}
+  .mi{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex:none;font-size:17px}
+  .mission .t{font-weight:600;font-size:14px}
+  .mission .s{font-size:12px;color:var(--muted);margin-top:2px}
+  .bar{height:6px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;margin-top:7px;width:170px;max-width:38vw}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue))}
+  .tag{margin-left:auto;font-size:11px;padding:4px 9px;border-radius:99px;flex:none}
+  .tag.run{background:var(--green-dim);color:var(--green)}
+  .tag.wait{background:rgba(255,198,88,.14);color:var(--amber)}
+
+  .composer{display:flex;flex-direction:column;gap:10px}
+  .composer textarea{width:100%;min-height:74px;resize:vertical;background:var(--panel-solid);border:1px solid var(--line);
+    border-radius:12px;color:var(--ink);padding:12px 14px;font-family:var(--font);font-size:14px;line-height:1.5}
+  .composer textarea:focus{outline:none;border-color:rgba(54,224,164,.5)}
+  .composer .row{display:flex;align-items:center;gap:10px}
+  .send{margin-left:auto;background:linear-gradient(135deg,var(--green),#27c08b);color:#04130d;font-weight:800;
+    border:none;border-radius:11px;padding:11px 20px;font-size:14px;cursor:pointer;transition:.15s}
+  .send:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(54,224,164,.35)}
+  .hint{font-size:12px;color:var(--muted)}
+  .feed{margin-top:4px;display:flex;flex-direction:column;gap:9px}
+  .msg{padding:10px 13px;border-radius:11px;font-size:13.5px;line-height:1.5;border:1px solid var(--line);background:var(--panel)}
+  .msg .who{font-size:11px;color:var(--muted);margin-bottom:3px;display:flex;align-items:center;gap:6px}
+  .msg.you{background:rgba(90,169,255,.08);border-color:rgba(90,169,255,.2)}
+  .msg .ok{color:var(--green);font-weight:700}
+
+  .approve{border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:11px;background:var(--panel-solid)}
+  .approve:last-child{margin-bottom:0}
+  .approve .h{font-size:13px;font-weight:600}
+  .approve .d{font-size:12px;color:var(--muted);margin:5px 0 11px}
+  .approve .btns{display:flex;gap:8px}
+  .btn{flex:1;border-radius:9px;padding:8px;font-size:12.5px;font-weight:700;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink);transition:.15s}
+  .btn.ok{background:var(--green);color:#04130d;border-color:transparent}
+  .btn.ok:hover{box-shadow:0 6px 16px rgba(54,224,164,.35)}
+  .btn.no:hover{background:var(--panel)}
+  .trust{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--muted);margin-top:4px;padding:11px 12px;border:1px dashed var(--line);border-radius:11px}
+  .trust b{color:var(--green)}
+
+  .foot{max-width:1480px;margin:0 auto;padding:16px 22px 34px;color:var(--muted);font-size:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .badge{font-size:11px;padding:3px 9px;border-radius:99px;border:1px solid var(--line)}
+
+  @media(max-width:1080px){
+    .app{grid-template-columns:1fr;gap:14px}
+    .col.left{order:1} .col.center{order:2} .col.right{order:3}
+    .left .agents-wrap{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+    .left .nav{display:none}
+    .bar{width:130px}
+  }
+  @media(max-width:560px){
+    .topbar{padding:12px 14px;gap:10px}
+    .ws-switch{display:none}
+    .app{padding:14px}
+    .left .agents-wrap{grid-template-columns:1fr}
+    .hero-row{gap:10px}
+    .kpi{min-width:calc(50% - 5px)}
+    .send{width:100%}
+    .composer .row{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="logo">◆</span> ORCHESTRA</div>
+  <div class="ws-switch">Workspace · <b>Vertis Command</b> ▾</div>
+  <div class="top-right">
+    <span class="pill"><span class="dot"></span>5 agents live</span>
+    <div class="avatar">DS</div>
+  </div>
+</div>
+
+<div class="app">
+
+  <div class="col left">
+    <div class="card">
+      <h3>Your Agents</h3>
+      <div class="agents-wrap">
+        <div class="agent active"><div class="ava" style="background:linear-gradient(135deg,#8a7bff,#5aa9ff)">D</div><div class="meta"><div class="nm">Dæmon</div><div class="rl">Maestro · backend</div></div><span class="sdot s-on"></span></div>
+        <div class="agent"><div class="ava" style="background:linear-gradient(135deg,#36e0a4,#27c08b)">Dæ</div><div class="meta"><div class="nm">Daedalus</div><div class="rl">Orchestrator</div></div><span class="sdot s-busy"></span></div>
+        <div class="agent"><div class="ava" style="background:linear-gradient(135deg,#ffc658,#ff8a5a)">P</div><div class="meta"><div class="nm">Pharos</div><div class="rl">Security · recon</div></div><span class="sdot s-on"></span></div>
+        <div class="agent"><div class="ava" style="background:linear-gradient(135deg,#5aa9ff,#36e0a4)">S</div><div class="meta"><div class="nm">Scout</div><div class="rl">Field intel</div></div><span class="sdot s-busy"></span></div>
+        <div class="agent"><div class="ava" style="background:linear-gradient(135deg,#ff6ba6,#8a7bff)">F</div><div class="meta"><div class="nm">Forge</div><div class="rl">Build · frontend</div></div><span class="sdot s-on"></span></div>
+      </div>
+    </div>
+    <div class="card nav">
+      <h3>Workspace</h3>
+      <div class="navlink on">⚡ Mission Control</div>
+      <div class="navlink">📋 Approvals <span style="margin-left:auto;background:var(--amber);color:#1a1300;font-size:11px;font-weight:800;padding:1px 7px;border-radius:99px">2</span></div>
+      <div class="navlink">🧠 Knowledge</div>
+      <div class="navlink">🔗 Integrations</div>
+      <div class="navlink">📊 Reports</div>
+    </div>
+  </div>
+
+  <div class="col center">
+    <div class="hero-row">
+      <div class="kpi"><div class="v">147 <small>▲ 12</small></div><div class="l">Tasks completed today</div></div>
+      <div class="kpi"><div class="v">5</div><div class="l">Agents orchestrating</div></div>
+      <div class="kpi"><div class="v">$7,114</div><div class="l">Stack value managed</div></div>
+      <div class="kpi"><div class="v">100%</div><div class="l">Human-approved sends</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Active Missions</h3>
+      <div class="mission">
+        <div class="mi" style="background:var(--green-dim)">🛡️</div>
+        <div><div class="t">Cottage infrastructure hardening</div><div class="s">Pharos + Scout · CVE sweep, Tailscale audit</div><div class="bar"><i style="width:72%"></i></div></div>
+        <span class="tag run">Running</span>
+      </div>
+      <div class="mission">
+        <div class="mi" style="background:rgba(90,169,255,.12)">🎨</div>
+        <div><div class="t">Investor MVP — UI variants</div><div class="s">Daedalus + Forge · 3 directions in parallel</div><div class="bar"><i style="width:58%"></i></div></div>
+        <span class="tag run">Running</span>
+      </div>
+      <div class="mission">
+        <div class="mi" style="background:rgba(255,198,88,.12)">📦</div>
+        <div><div class="t">Sovereign host migration</div><div class="s">Dæmon · Hetzner + n8n router</div><div class="bar"><i style="width:34%"></i></div></div>
+        <span class="tag wait">Awaiting you</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Command the Orchestra</h3>
+      <div class="composer">
+        <textarea id="cmd" placeholder="Tell the team what you need… e.g. &quot;Draft the investor one-pager and prep three UI looks.&quot;"></textarea>
+        <div class="row">
+          <span class="hint">Routed to the fleet · nothing external sends without your OK</span>
+          <button class="send" onclick="sendCmd()">Send to fleet ▸</button>
+        </div>
+        <div class="feed" id="feed">
+          <div class="msg"><div class="who">◆ Daedalus · just now</div>Standing by, Dovi. The team's running three investor-UI directions in parallel — say the word and I'll surface the strongest for your eyes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col right">
+    <div class="card">
+      <h3>Needs your approval</h3>
+      <div class="approve">
+        <div class="h">📧 Investor follow-up email</div>
+        <div class="d">Daedalus drafted a reply to the warm intro. Ready to send from dovi@vertis3d.com.</div>
+        <div class="btns"><button class="btn ok" onclick="this.closest('.approve').style.opacity=.4;this.closest('.approve').querySelector('.btns').innerHTML='<span style=\'color:var(--green);font-weight:700;font-size:12px\'>✓ Approved — sending</span>'">Approve &amp; send</button><button class="btn no">Review</button></div>
+      </div>
+      <div class="approve">
+        <div class="h">🗑️ Cottage cleanup — 25 GB</div>
+        <div class="d">Pharos corroborated the bloat list. Safe to reclaim disk on the cottage host.</div>
+        <div class="btns"><button class="btn ok" onclick="this.closest('.approve').style.opacity=.4;this.closest('.approve').querySelector('.btns').innerHTML='<span style=\'color:var(--green);font-weight:700;font-size:12px\'>✓ Approved</span>'">Approve</button><button class="btn no">Hold</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Trust &amp; control</h3>
+      <div class="trust">🔒 <span><b>Human-in-the-loop, always.</b> No email, message, or post leaves without your explicit OK.</span></div>
+      <div class="trust" style="margin-top:9px">🧠 <span>Every agent shares one memory graph — they never repeat each other's work.</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <span class="badge">● Live preview</span>
+  <span>Orchestra — your autonomous AI workforce, conducted. This interface relays to the live fleet.</span>
+</div>
+
+<script>
+const RELAY="https://webhooks.tasklet.ai/v1/public/webhook/a_6z2xq6xzmx8wpecpytt7?token=19dd319b52730827e4215f2b8e0b4fbb";
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function sendCmd(){
+  const t=document.getElementById('cmd');const v=t.value.trim();if(!v)return;
+  const feed=document.getElementById('feed');
+  feed.insertAdjacentHTML('afterbegin',
+    '<div class="msg you"><div class="who">🧑 You · just now</div>'+esc(v)+'</div>');
+  t.value='';
+  try{fetch(RELAY,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({from:'Investor Demo UI',action:'command',message:v,priority:'high'})});}catch(e){}
+  setTimeout(()=>{feed.insertAdjacentHTML('afterbegin',
+    '<div class="msg"><div class="who">◆ Daedalus · routing</div><span class="ok">✓ Relayed to the fleet.</span> Daedalus is triaging and will assign the right agents. You\'ll get the result back here.</div>');},650);
+}
+document.getElementById('cmd').addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')sendCmd();});
+</script>
+</body>
+</html>
