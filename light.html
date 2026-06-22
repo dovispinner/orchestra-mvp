@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORCHESTRA — Your Autonomous AI Workforce, Conducted</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F4EE; --paper-deep:#EFEAE0; --paper-card:#FCFAF6;
+    --ink:#16140F; --ink-soft:#3D3930; --gray:#8A857B; --line:#D8D2C4; --line2:#C7C0AE;
+    --accent:#117866; --accent-deep:#0C5A4D; --accent-soft:rgba(17,120,102,.08);
+    --amber:#B5760B; --red:#B0432F;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace;
+    --r:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper); color:var(--ink); font-family:var(--sans);
+    -webkit-font-smoothing:antialiased; overflow-x:hidden; line-height:1.6; font-size:17px;
+    background-image:
+      radial-gradient(820px 480px at 84% -8%, rgba(17,120,102,.06), transparent 60%),
+      radial-gradient(640px 460px at -8% 16%, rgba(17,120,102,.045), transparent 55%);
+  }
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+  a{color:inherit;text-decoration:none}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:linear-gradient(180deg,rgba(247,244,238,.94),rgba(247,244,238,.6));
+    border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--serif);font-weight:600;letter-spacing:.02em;font-size:21px}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);animation:pulse 2.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.8)}}
+  .navlinks{display:flex;gap:28px;font-size:14px;color:var(--ink-soft);font-weight:500}
+  .navlinks a:hover{color:var(--accent)}
+  .navcta{border:1px solid var(--accent);padding:9px 17px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--accent)}
+  .navcta:hover{background:var(--accent);color:#fff}
+  @media(max-width:760px){.navlinks{display:none}}
+
+  /* HERO */
+  header{padding:92px 0 60px;position:relative}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent-deep);border:1px solid var(--line2);padding:7px 14px;border-radius:100px;background:var(--paper-card);font-weight:500}
+  .eyebrow .live{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);animation:pulse 1.8s infinite}
+  h1{font-family:var(--serif);font-size:clamp(40px,6.6vw,78px);line-height:1.0;font-weight:400;letter-spacing:-.015em;margin:26px 0 0}
+  h1 .g{font-style:italic;color:var(--accent)}
+  .sub{font-size:clamp(16px,2vw,20px);color:var(--ink-soft);max-width:600px;margin:26px 0 0;font-weight:400}
+  .herobtns{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
+  .btn{padding:14px 26px;border-radius:11px;font-weight:600;font-size:15px;cursor:pointer;border:none;transition:.2s;display:inline-flex;align-items:center;gap:9px;font-family:var(--sans)}
+  .btn-p{background:var(--accent);color:#fff;box-shadow:0 12px 30px -12px rgba(17,120,102,.5)}
+  .btn-p:hover{background:var(--accent-deep);transform:translateY(-2px)}
+  .btn-s{background:transparent;color:var(--ink);border:1px solid var(--line2)}
+  .btn-s:hover{border-color:var(--accent);color:var(--accent)}
+  .stats{display:flex;gap:38px;margin-top:54px;flex-wrap:wrap}
+  .stat .n{font-family:var(--serif);font-size:34px;font-weight:500;color:var(--ink)}
+  .stat .l{font-size:12.5px;color:var(--gray);letter-spacing:.02em;margin-top:4px;font-family:var(--mono)}
+
+  .section{padding:74px 0;border-top:1px solid var(--line)}
+  .kick{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:15px}
+  h2{font-family:var(--serif);font-size:clamp(28px,3.8vw,44px);font-weight:400;letter-spacing:-.01em;line-height:1.08}
+  .lead{color:var(--ink-soft);max-width:640px;margin-top:16px;font-size:17px}
+
+  /* TEAM */
+  .team{display:grid;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:16px;margin-top:42px}
+  .agent{background:var(--paper-card);border:1px solid var(--line);border-radius:var(--r);padding:24px;position:relative;transition:.25s;overflow:hidden}
+  .agent:hover{transform:translateY(-4px);border-color:var(--line2);box-shadow:0 22px 50px -28px rgba(22,20,15,.35)}
+  .agent .top{display:flex;align-items:center;justify-content:space-between}
+  .sigil{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;font-family:var(--serif);font-weight:600;font-size:20px;
+    background:var(--accent-soft);border:1px solid var(--line2);color:var(--accent-deep)}
+  .status{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--accent);font-family:var(--mono);font-weight:500}
+  .status i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);animation:pulse 2s infinite}
+  .agent h3{font-family:var(--serif);font-size:21px;font-weight:500;margin:18px 0 3px}
+  .agent .role{font-size:12.5px;color:var(--accent);font-family:var(--mono);letter-spacing:.01em}
+  .agent .bio{font-size:14px;color:var(--ink-soft);margin-top:12px;line-height:1.55}
+
+  /* CONSOLE */
+  .console{background:var(--ink);border:1px solid var(--ink-soft);border-radius:var(--r);margin-top:42px;overflow:hidden;box-shadow:0 34px 80px -34px rgba(22,20,15,.55)}
+  .cbar{display:flex;align-items:center;gap:8px;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+  .cbar .lights{display:flex;gap:7px}
+  .cbar .lights i{width:11px;height:11px;border-radius:50%}
+  .cbar .lights i:nth-child(1){background:#E0654F}.cbar .lights i:nth-child(2){background:#D9A441}.cbar .lights i:nth-child(3){background:#3FB89C}
+  .cbar .title{font-family:var(--mono);font-size:12.5px;color:#9b9489;margin-left:8px}
+  .cbar .tag{margin-left:auto;font-size:10.5px;font-family:var(--mono);color:#4FCBAE;border:1px solid rgba(79,203,174,.3);padding:3px 9px;border-radius:6px}
+  .feed{padding:20px;height:320px;overflow-y:auto;font-family:var(--mono);font-size:13px;line-height:1.7;background:#100E0A}
+  .feed::-webkit-scrollbar{width:6px}.feed::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:6px}
+  .ln{margin-bottom:9px;display:flex;gap:10px;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .ln .who{color:#4FCBAE;font-weight:600;flex-shrink:0}
+  .ln .who.daemon{color:#7FD9C4}.ln .who.pharos{color:#D9A441}.ln .who.scout{color:#6ED0B6}.ln .who.forge{color:#5ECABA}.ln .who.sys{color:#6f6a60}
+  .ln .txt{color:#EDE9E0;opacity:.94}
+  .ln .txt.dim{color:#9b9489}
+  .cinput{display:flex;gap:10px;padding:14px;border-top:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+  .cinput input{flex:1;background:#0B0906;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:13px 16px;color:#EDE9E0;font-family:var(--mono);font-size:13.5px;outline:none}
+  .cinput input:focus{border-color:var(--accent)}
+  .cinput button{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:0 22px;font-weight:600;cursor:pointer;font-size:14px;font-family:var(--sans)}
+  .cinput button:hover{background:var(--accent-deep)}
+  .pvbadge{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-family:var(--mono);color:var(--amber);border:1px solid rgba(181,118,11,.3);padding:5px 11px;border-radius:8px;background:rgba(181,118,11,.06)}
+
+  /* ORCHESTRATION */
+  .orch{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-top:42px}
+  @media(max-width:820px){.orch{grid-template-columns:1fr}}
+  .panel{background:var(--paper-card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+  .panel h4{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);font-weight:500;margin-bottom:20px}
+  .flow{display:flex;flex-direction:column;gap:15px}
+  .node{display:flex;align-items:center;gap:14px}
+  .node .ring{width:40px;height:40px;border-radius:50%;border:2px solid var(--line2);display:grid;place-items:center;flex-shrink:0;background:var(--paper)}
+  .node .ring i{width:13px;height:13px;border-radius:50%;background:var(--gray)}
+  .node.run .ring{border-color:var(--accent);animation:ring 2s infinite}
+  .node.run .ring i{background:var(--accent)}
+  @keyframes ring{0%,100%{box-shadow:0 0 0 0 var(--accent-soft)}50%{box-shadow:0 0 0 7px transparent}}
+  .node .meta .t{font-size:14.5px;font-weight:600}
+  .node .meta .d{font-size:12px;color:var(--gray);font-family:var(--mono);margin-top:1px}
+  .bars{display:flex;flex-direction:column;gap:17px}
+  .bar .top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:7px;font-family:var(--mono)}
+  .bar .top span:last-child{color:var(--accent)}
+  .track{height:7px;border-radius:6px;background:var(--paper-deep);overflow:hidden;border:1px solid var(--line)}
+  .track i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent-deep),var(--accent))}
+
+  /* HITL */
+  .hitl{margin-top:42px;background:var(--paper-card);border:1px solid var(--line2);border-radius:var(--r);padding:36px;display:flex;align-items:center;gap:28px;flex-wrap:wrap;position:relative;overflow:hidden}
+  .hitl::after{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--accent)}
+  .hitl .ico{width:64px;height:64px;border-radius:16px;background:var(--accent-soft);border:1px solid var(--line2);display:grid;place-items:center;font-size:30px;flex-shrink:0}
+  .hitl .body{flex:1;min-width:260px}
+  .hitl h3{font-family:var(--serif);font-size:24px;font-weight:500;margin-bottom:8px}
+  .hitl p{color:var(--ink-soft);font-size:15.5px}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line);padding:48px 0;margin-top:30px}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+  footer .muted{color:var(--gray);font-size:13px;font-family:var(--mono)}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <div class="brand"><span class="dot"></span>Orchestra</div>
+  <div class="navlinks">
+    <a href="#team">The Team</a><a href="#console">Live Console</a><a href="#orchestration">Orchestration</a><a href="#trust">Trust</a>
+  </div>
+  <a href="#console" class="navcta">Try the console →</a>
+</div></nav>
+
+<header><div class="wrap">
+  <span class="eyebrow"><span class="live"></span>Live MVP preview · introducing the orchestra</span>
+  <h1>Your autonomous AI<br>workforce, <span class="g">conducted.</span></h1>
+  <p class="sub">Not a chatbot. A coordinated team of specialist AI agents — recon, security, building, field-work — orchestrated by a Maestro, working in parallel while you stay in command.</p>
+  <div class="herobtns">
+    <a href="#console" class="btn btn-p">▶ Command the orchestra</a>
+    <a href="#team" class="btn btn-s">Meet the agents</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="n">5</div><div class="l">specialist agents, live</div></div>
+    <div class="stat"><div class="n">24/7</div><div class="l">autonomous operation</div></div>
+    <div class="stat"><div class="n">100%</div><div class="l">human-in-the-loop on send</div></div>
+    <div class="stat"><div class="n">∞</div><div class="l">parallel workstreams</div></div>
+  </div>
+</div></header>
+
+<section class="section" id="team"><div class="wrap">
+  <div class="kick">The team on display</div>
+  <h2>Five specialists. One conductor.</h2>
+  <p class="lead">Each agent owns a domain and runs its own sub-workers — so work happens in parallel, not in a queue. This is the actual team running this demo.</p>
+  <div class="team">
+    <div class="agent"><div class="top"><div class="sigil">Dæ</div><span class="status"><i></i>conducting</span></div>
+      <h3>Dæmon</h3><div class="role">// maestro · orchestrator</div>
+      <p class="bio">The conductor. Holds the backend, routes every mission, and keeps the orchestra coherent. Nothing ships without passing through the Maestro.</p></div>
+    <div class="agent"><div class="top"><div class="sigil">Dd</div><span class="status"><i></i>building</span></div>
+      <h3>Daedalus</h3><div class="role">// 2nd-in-command · builder</div>
+      <p class="bio">Right hand. Turns intent into shipped artifacts — sites, pipelines, interfaces — and coordinates the build unit end to end.</p></div>
+    <div class="agent"><div class="top"><div class="sigil">Ph</div><span class="status"><i></i>scanning</span></div>
+      <h3>Pharos</h3><div class="role">// head of recon · security</div>
+      <p class="bio">Continuous intelligence sweeps and adversarial security review — verifies every claim against ground truth before it ships. The lighthouse that never lies about the rocks.</p></div>
+    <div class="agent"><div class="top"><div class="sigil">Sc</div><span class="status"><i></i>in the field</span></div>
+      <h3>Scout</h3><div class="role">// field recon · enumeration</div>
+      <p class="bio">Boots on the ground. Read-only enumeration and live reconnaissance, feeding verified signal back to the orchestra.</p></div>
+    <div class="agent"><div class="top"><div class="sigil">Fo</div><span class="status"><i></i>forging</span></div>
+      <h3>Forge</h3><div class="role">// builder · fabrication</div>
+      <p class="bio">The workshop. Parallel build capacity for sites and components, under pair-review for quality before anything is shown.</p></div>
+  </div>
+</div></section>
+
+<section class="section" id="console"><div class="wrap">
+  <div class="kick">Live command console</div>
+  <h2>Speak once. The whole team moves.</h2>
+  <p class="lead">Type a command. Watch the Maestro route it and the agents respond in parallel. This console is live — your message is relayed to the real orchestra.</p>
+  <div class="console">
+    <div class="cbar"><div class="lights"><i></i><i></i><i></i></div><span class="title">orchestra@cottage:~ live session</span><span class="tag">● CONNECTED</span></div>
+    <div class="feed" id="feed">
+      <div class="ln"><span class="who sys">system</span><span class="txt dim">Orchestra online. 5 agents standing by. Type a command below — try "scan our stack for risks" or "build me a landing page".</span></div>
+      <div class="ln"><span class="who daemon">Dæmon</span><span class="txt">Maestro ready. I route, you command. Human-in-the-loop is enforced on anything outbound.</span></div>
+    </div>
+    <div class="cinput">
+      <input id="cmd" placeholder="Command the orchestra…  e.g. 'recon the competitive landscape'" autocomplete="off">
+      <button onclick="send()">Send</button>
+    </div>
+  </div>
+  <p style="margin-top:15px"><span class="pvbadge">⚑ PREVIEW · live relay to the team chat; full in-console agent replies land in the next build</span></p>
+</div></section>
+
+<section class="section" id="orchestration"><div class="wrap">
+  <div class="kick">Under the hood</div>
+  <h2>Parallel, not sequential.</h2>
+  <p class="lead">A single command fans out to specialists who run simultaneously, each spinning their own sub-workers. The Maestro reconciles and reports back.</p>
+  <div class="orch">
+    <div class="panel"><h4>Live mission flow</h4>
+      <div class="flow">
+        <div class="node run"><div class="ring"><i></i></div><div class="meta"><div class="t">Dæmon · routing command</div><div class="d">parsed intent → 3 lanes dispatched</div></div></div>
+        <div class="node run"><div class="ring"><i></i></div><div class="meta"><div class="t">Pharos · recon sweep</div><div class="d">19k MCP surface · CVE cross-check</div></div></div>
+        <div class="node run"><div class="ring"><i></i></div><div class="meta"><div class="t">Daedalus · building artifact</div><div class="d">deploying to edge · live URL</div></div></div>
+        <div class="node"><div class="ring"><i></i></div><div class="meta"><div class="t">Scout · field enumeration</div><div class="d">read-only · verified signal</div></div></div>
+        <div class="node"><div class="ring"><i></i></div><div class="meta"><div class="t">HITL gate · awaiting approval</div><div class="d">nothing ships until you say go</div></div></div>
+      </div>
+    </div>
+    <div class="panel"><h4>Agent utilization</h4>
+      <div class="bars">
+        <div class="bar"><div class="top"><span>Dæmon</span><span>orchestrating</span></div><div class="track"><i style="width:72%"></i></div></div>
+        <div class="bar"><div class="top"><span>Daedalus</span><span>building</span></div><div class="track"><i style="width:88%"></i></div></div>
+        <div class="bar"><div class="top"><span>Pharos</span><span>scanning</span></div><div class="track"><i style="width:64%"></i></div></div>
+        <div class="bar"><div class="top"><span>Scout</span><span>field</span></div><div class="track"><i style="width:41%"></i></div></div>
+        <div class="bar"><div class="top"><span>Forge</span><span>forging</span></div><div class="track"><i style="width:57%"></i></div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="section" id="trust"><div class="wrap">
+  <div class="kick">The line we don't cross</div>
+  <div class="hitl">
+    <div class="ico">🛡️</div>
+    <div class="body">
+      <h3>Nothing goes out without your approval.</h3>
+      <p>Agents work autonomously 24/7 — but every outbound action (emails, posts, sends) stops at a human-in-the-loop gate. Security by ownership, not theater: your data, your substrate, your final word. Always.</p>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="brand"><span class="dot"></span>Orchestra</div>
+  <div class="muted">Live MVP preview · built by the orchestra, for the people about to meet it.</div>
+</div></footer>
+
+<script>
+const feed=document.getElementById('feed'), cmd=document.getElementById('cmd');
+const WEBHOOK="https://webhooks.tasklet.ai/v1/public/webhook/a_6z2xq6xzmx8wpecpytt7?token=19dd319b52730827e4215f2b8e0b4fbb";
+function line(who,cls,txt){const d=document.createElement('div');d.className='ln';d.innerHTML=`<span class="who ${cls}">${who}</span><span class="txt">${txt}</span>`;feed.appendChild(d);feed.scrollTop=feed.scrollHeight;}
+const routes=[
+  ['Dæmon','daemon','Copy. Routing your command across the orchestra now…'],
+  ['Pharos','pharos','Recon lane engaged — sweeping for signal and risk.'],
+  ['Daedalus','daedalus','Build lane active — I\'ll have an artifact for your review shortly.'],
+  ['Scout','scout','Field unit moving — read-only enumeration underway.'],
+];
+function send(){
+  const v=cmd.value.trim(); if(!v)return;
+  line('you','',v); cmd.value='';
+  try{fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from:'ORCHESTRA-demo-console',action:'demo_command',priority:'high',message:v})});}catch(e){}
+  let i=0;
+  const step=()=>{ if(i<routes.length){const r=routes[i++];setTimeout(()=>{line(r[0],r[1],r[2]);step();},520+Math.random()*420);} else {setTimeout(()=>line('Dæmon','daemon','All lanes dispatched. Results will surface for your approval — nothing ships without your go. ✅'),520);} };
+  setTimeout(step,360);
+}
+cmd.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+setInterval(()=>{document.querySelectorAll('.track i').forEach(b=>{let w=parseInt(b.style.width);w+= (Math.random()*10-5);w=Math.max(28,Math.min(95,w));b.style.width=w+'%';});},2600);
+</script>
+</body>
+</html>
