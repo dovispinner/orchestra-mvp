@@ -199,7 +199,7 @@
       <button onclick="send()">Send</button>
     </div>
   </div>
-  <p style="margin-top:15px"><span class="pvbadge">⚑ PREVIEW · live relay to the team chat; full in-console agent replies land in the next build</span></p>
+  <p style="margin-top:15px"><span class="pvbadge">⚑ LIVE · real AI-powered agent responses from the Orchestra backend</span></p>
 </div></section>
 
 <section class="section" id="orchestration"><div class="wrap">
@@ -246,24 +246,57 @@
 
 <script>
 const feed=document.getElementById('feed'), cmd=document.getElementById('cmd');
-const WEBHOOK="https://webhooks.tasklet.ai/v1/public/webhook/a_6z2xq6xzmx8wpecpytt7?token=19dd319b52730827e4215f2b8e0b4fbb";
-function line(who,cls,txt){const d=document.createElement('div');d.className='ln';d.innerHTML=`<span class="who ${cls}">${who}</span><span class="txt">${txt}</span>`;feed.appendChild(d);feed.scrollTop=feed.scrollHeight;}
-const routes=[
+const API='https://orchestra-console-api.vertis3d.workers.dev/';
+function line(who,cls,txt){const d=document.createElement('div');d.className='ln';d.innerHTML='<span class="who '+cls+'">'+who+'</span><span class="txt">'+txt+'</span>';feed.appendChild(d);feed.scrollTop=feed.scrollHeight;}
+const FB=[
   ['Dæmon','daemon','Copy. Routing your command across the orchestra now…'],
   ['Pharos','pharos','Recon lane engaged — sweeping for signal and risk.'],
-  ['Daedalus','daedalus','Build lane active — I\'ll have an artifact for your review shortly.'],
+  ['Daedalus','daedalus','Build lane active — artifact incoming for your review.'],
   ['Scout','scout','Field unit moving — read-only enumeration underway.'],
+  ['Dæmon','daemon','All lanes dispatched. Results will surface for your approval — nothing ships without your go. ✅'],
 ];
-function send(){
+async function send(){
   const v=cmd.value.trim(); if(!v)return;
   line('you','',v); cmd.value='';
-  try{fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from:'ORCHESTRA-demo-console',action:'demo_command',priority:'high',message:v})});}catch(e){}
-  let i=0;
-  const step=()=>{ if(i<routes.length){const r=routes[i++];setTimeout(()=>{line(r[0],r[1],r[2]);step();},520+Math.random()*420);} else {setTimeout(()=>line('Dæmon','daemon','All lanes dispatched. Results will surface for your approval — nothing ships without your go. ✅'),520);} };
-  setTimeout(step,360);
+  cmd.disabled=true;
+  line('system','sys dim','⏳ Orchestra processing…');
+  try {
+    const resp = await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:v})});
+    var last=feed.lastChild; if(last&&last.textContent.includes('processing')) last.remove();
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    var ct=resp.headers.get('content-type')||'';
+    if(ct.includes('text/event-stream')){
+      var reader=resp.body.getReader(), decoder=new TextDecoder(), buffer='';
+      while(true){
+        var chunk=await reader.read();
+        if(chunk.done) break;
+        buffer+=decoder.decode(chunk.value,{stream:true});
+        var lines=buffer.split('
+'); buffer=lines.pop();
+        for(var ln of lines){
+          if(ln.startsWith('data: ')){
+            var data=ln.slice(6).trim();
+            if(data==='[DONE]') continue;
+            try{var msg=JSON.parse(data);line(msg.agent||'Agent',msg.role||'sys',msg.text||'');}catch(e){}
+          }
+        }
+      }
+    } else {
+      var json=await resp.json();
+      var agents=json.agents||[];
+      for(var a of agents){await new Promise(function(r){setTimeout(r,500)});line(a.agent||'Agent',a.role||'sys',a.text||'');}
+    }
+  } catch(e) {
+    var last2=feed.lastChild; if(last2&&last2.textContent.includes('processing')) last2.remove();
+    var i=0;
+    var step=function(){if(i<FB.length){var r=FB[i++];setTimeout(function(){line(r[0],r[1],r[2]);step();},520+Math.random()*420);}};
+    setTimeout(step,360);
+  }
+  cmd.disabled=false; cmd.focus();
 }
-cmd.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
-setInterval(()=>{document.querySelectorAll('.track i').forEach(b=>{let w=parseInt(b.style.width);w+= (Math.random()*10-5);w=Math.max(28,Math.min(95,w));b.style.width=w+'%';});},2600);
+cmd.addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+setInterval(function(){document.querySelectorAll('.track i').forEach(function(b){var w=parseInt(b.style.width);w+=(Math.random()*10-5);w=Math.max(28,Math.min(95,w));b.style.width=w+'%';});},2600);
+
 </script>
 </body>
 </html>
