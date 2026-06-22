@@ -272,8 +272,7 @@ async function send(){
         var chunk=await reader.read();
         if(chunk.done) break;
         buffer+=decoder.decode(chunk.value,{stream:true});
-        var lines=buffer.split('
-'); buffer=lines.pop();
+        var lines=buffer.split('\n'); buffer=lines.pop();
         for(var ln of lines){
           if(ln.startsWith('data: ')){
             var data=ln.slice(6).trim();
