@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1240">
+<title>Organic Intelligence — A living team that grows with you</title>
+<style>
+:root{
+  --bg:#07120d; --bg2:#0a1a12; --panel:rgba(20,40,30,.55); --panel2:rgba(14,30,22,.7);
+  --line:rgba(110,231,183,.16); --line2:rgba(110,231,183,.30);
+  --ink:#eafff4; --muted:#9fc7b3; --dim:#6f9a85;
+  --grn:#34d399; --grn2:#6ee7b7; --lime:#a3e635; --gold:#e9c46a; --teal:#2dd4bf;
+  --glow:0 0 40px rgba(52,211,153,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1200px 700px at 75% -8%, rgba(45,212,191,.14), transparent 60%),
+    radial-gradient(900px 600px at 8% 12%, rgba(163,230,53,.08), transparent 55%),
+    linear-gradient(180deg,#08150e 0%, #07120d 40%, #06100b 100%);
+  color:var(--ink); font-family:"Segoe UI",-apple-system,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden; line-height:1.5;
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 34px}
+.eyebrow{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--grn2);font-weight:700}
+.soft{color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;
+  padding:5px 12px;border:1px solid var(--line2);border-radius:999px;color:var(--grn2);
+  background:rgba(52,211,153,.07)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+  background:linear-gradient(180deg,rgba(6,16,11,.92),rgba(6,16,11,.55));
+  border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:26px;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.3px;font-size:16px}
+.seed{width:26px;height:26px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--grn2),var(--grn) 45%,#0b3a28 100%);
+  box-shadow:var(--glow);position:relative}
+.seed::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--line2);
+  animation:pulse 3.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.18);opacity:.15}}
+.navlinks{display:flex;gap:22px;margin-left:auto;font-size:13.5px;color:var(--muted);font-weight:600}
+.navlinks a:hover{color:var(--grn2)}
+.navcta{padding:8px 16px;border-radius:999px;background:linear-gradient(180deg,var(--grn2),var(--grn));
+  color:#04241a;font-weight:800;font-size:13px;box-shadow:var(--glow)}
+
+/* HERO */
+header{position:relative;padding:92px 0 70px;overflow:hidden}
+#living{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.85}
+header .wrap{position:relative;z-index:2}
+h1{font-size:62px;line-height:1.02;letter-spacing:-1.6px;font-weight:800;margin:18px 0 0;max-width:15ch}
+h1 .g{background:linear-gradient(120deg,var(--grn2),var(--teal) 60%,var(--lime));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:19px;color:var(--muted);max-width:60ch;margin-top:22px;line-height:1.62}
+.herobtns{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}
+.btn{padding:13px 24px;border-radius:12px;font-weight:800;font-size:14.5px;cursor:pointer;border:0}
+.btn.primary{background:linear-gradient(180deg,var(--grn2),var(--grn));color:#04241a;box-shadow:var(--glow)}
+.btn.ghost{background:rgba(255,255,255,.04);border:1px solid var(--line2);color:var(--ink)}
+.herostats{display:flex;gap:34px;margin-top:46px;flex-wrap:wrap}
+.herostats div{display:flex;flex-direction:column}
+.herostats b{font-size:30px;font-weight:800;color:var(--grn2)}
+.herostats span{font-size:12.5px;color:var(--dim);letter-spacing:.4px;margin-top:2px}
+
+/* TICKER */
+.ticker{margin-top:40px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);
+  overflow:hidden;position:relative}
+.ticker .lbl{position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;padding:0 16px;
+  background:linear-gradient(90deg,#0b2018,#0b2018ee,transparent);font-size:11px;font-weight:800;
+  letter-spacing:1.5px;color:var(--grn2);z-index:2}
+.track{display:flex;gap:46px;white-space:nowrap;padding:13px 0 13px 150px;animation:scroll 34s linear infinite;font-size:13px;color:var(--muted)}
+.track b{color:var(--grn2)}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTION */
+section{padding:74px 0;position:relative}
+.shead{max-width:62ch}
+.shead h2{font-size:38px;letter-spacing:-.9px;font-weight:800;margin:12px 0 0}
+.shead p{color:var(--muted);font-size:16.5px;margin-top:14px;line-height:1.6}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+
+/* SHIFT */
+.shift{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:42px}
+.shift .card{border-radius:18px;padding:30px}
+.old{background:rgba(40,20,20,.4);border:1px solid rgba(220,120,120,.18)}
+.new{background:linear-gradient(160deg,rgba(20,46,34,.7),rgba(12,28,20,.6));border:1px solid var(--line2);box-shadow:var(--glow)}
+.shift h3{font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.old h3{color:#e0928c}.new h3{color:var(--grn2)}
+.shift li{list-style:none;display:flex;gap:11px;padding:9px 0;font-size:14.5px;color:var(--muted);border-top:1px solid rgba(255,255,255,.05)}
+.shift li:first-of-type{border-top:0}
+.shift .mk{flex:0 0 auto;font-weight:800}
+.old .mk{color:#dc8b84}.new .mk{color:var(--grn2)}
+.new li{color:#dff7ec}
+
+/* UNITS */
+.ugrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px}
+.unit{position:relative;border:1px solid var(--line);border-radius:18px;padding:24px;
+  background:linear-gradient(165deg,var(--panel),var(--panel2));transition:.25s;overflow:hidden}
+.unit::before{content:"";position:absolute;left:0;top:0;height:3px;width:100%;
+  background:linear-gradient(90deg,var(--grn),var(--teal),var(--lime));opacity:.0;transition:.25s}
+.unit:hover{transform:translateY(-4px);border-color:var(--line2);box-shadow:0 18px 50px rgba(0,0,0,.4),var(--glow)}
+.unit:hover::before{opacity:1}
+.unit .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;background:rgba(52,211,153,.1);border:1px solid var(--line2);margin-bottom:14px}
+.unit h4{font-size:18px;font-weight:800;letter-spacing:-.2px}
+.unit .head{font-size:12px;color:var(--grn2);font-weight:700;margin:3px 0 12px;letter-spacing:.3px}
+.unit .caps{font-size:13.2px;color:var(--muted);line-height:1.65}
+.unit .spec{display:flex;flex-wrap:wrap;gap:6px;margin:13px 0}
+.unit .spec span{font-size:10.5px;font-weight:600;color:var(--dim);background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:3px 8px}
+.unit .pain{margin-top:14px;padding-top:13px;border-top:1px solid var(--line);
+  font-size:13px;font-style:italic;color:var(--grn2)}
+.unitnote{text-align:center;margin-top:26px;font-size:14px;color:var(--dim)}
+.unitnote b{color:var(--grn2)}
+
+/* PERSONAS */
+.ptabs{display:flex;gap:10px;margin-top:38px;flex-wrap:wrap}
+.ptab{padding:12px 22px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);
+  cursor:pointer;font-weight:700;font-size:14.5px;color:var(--muted);transition:.2s;display:flex;align-items:center;gap:9px}
+.ptab.active{border-color:var(--grn2);color:var(--ink);background:linear-gradient(160deg,rgba(20,46,34,.8),rgba(12,28,20,.6));box-shadow:var(--glow)}
+.ppanel{display:none;margin-top:26px;border:1px solid var(--line2);border-radius:20px;overflow:hidden}
+.ppanel.show{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ptop{padding:30px 32px;background:linear-gradient(160deg,rgba(20,46,34,.55),rgba(10,24,17,.5))}
+.ptop h3{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.ptop .who{color:var(--muted);font-size:14.5px;margin-top:6px}
+.punits{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.punits span{font-size:12px;font-weight:700;color:var(--grn2);background:rgba(52,211,153,.09);
+  border:1px solid var(--line2);border-radius:8px;padding:6px 12px}
+.pbody{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.pcol{padding:26px 32px}
+.pcol:first-child{border-right:1px solid var(--line)}
+.pcol h5{font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.pcol li{list-style:none;font-size:14px;color:var(--muted);padding:9px 0;display:flex;gap:10px;border-top:1px solid rgba(255,255,255,.05)}
+.pcol li:first-child{border-top:0}
+.proact{background:rgba(52,211,153,.05)}
+.proact li{color:#dff7ec}
+.proact .mk{color:var(--grn2);font-weight:800;flex:0 0 auto}
+.pain .mk{color:#e0928c;flex:0 0 auto}
+
+/* PILLARS */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px}
+.pill{border:1px solid var(--line);border-radius:18px;padding:26px;background:var(--panel2);transition:.2s}
+.pill:hover{border-color:var(--line2);transform:translateY(-3px)}
+.pill .n{font-size:12px;font-weight:800;color:var(--grn);letter-spacing:1px}
+.pill h4{font-size:18.5px;font-weight:800;margin:10px 0 9px;letter-spacing:-.3px}
+.pill p{font-size:13.8px;color:var(--muted);line-height:1.62}
+.pill.moat{grid-column:span 3;background:linear-gradient(120deg,rgba(20,46,34,.8),rgba(10,24,17,.5));border-color:var(--line2);
+  box-shadow:var(--glow);display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.pill.moat .mleft{flex:1;min-width:280px}
+.pill.moat h4{font-size:24px}
+.pill.moat .badge{font-size:11px;font-weight:800;letter-spacing:1.5px;color:#04241a;
+  background:linear-gradient(180deg,var(--grn2),var(--grn));padding:5px 12px;border-radius:999px;display:inline-block;margin-bottom:10px}
+.moatvis{flex:0 0 280px;border-left:1px solid var(--line);padding-left:26px}
+.moatvis .row{display:flex;align-items:center;gap:11px;font-size:13px;padding:7px 0;color:var(--muted)}
+.moatvis .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.dot.g{background:var(--grn2);box-shadow:0 0 10px var(--grn2)}
+.dot.r{background:#dc8b84}
+
+/* ROADMAP */
+.road{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.rcard{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--panel2)}
+.rcard .st{font-size:11px;font-weight:800;letter-spacing:1px;padding:3px 9px;border-radius:6px;display:inline-block;margin-bottom:12px}
+.st.live{color:#04241a;background:var(--grn2)}
+.st.soon{color:#1a2410;background:var(--lime)}
+.st.next{color:var(--grn2);border:1px solid var(--line2)}
+.rcard h4{font-size:16px;font-weight:800;margin-bottom:7px}
+.rcard p{font-size:13px;color:var(--muted);line-height:1.55}
+
+/* TRUST / CTA */
+.trust{margin-top:30px;border:1px solid var(--line2);border-radius:18px;padding:30px 34px;
+  background:linear-gradient(160deg,rgba(20,46,34,.55),rgba(10,24,17,.4));display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.trust .lk{font-size:30px}
+.trust b{color:var(--grn2)}
+.finalcta{text-align:center;padding:80px 0 30px}
+.finalcta h2{font-size:44px;letter-spacing:-1px;font-weight:800;max-width:18ch;margin:0 auto}
+.finalcta p{color:var(--muted);font-size:17px;margin:18px auto 30px;max-width:54ch}
+footer{border-top:1px solid var(--line);padding:34px 0;color:var(--dim);font-size:12.5px;text-align:center}
+
+/* CONSOLE (cosmetic) */
+.console{margin-top:30px;border:1px solid var(--line);border-radius:14px;background:#05100b;overflow:hidden;font-family:"SF Mono",ui-monospace,Menlo,monospace}
+.cbar{display:flex;align-items:center;gap:9px;padding:11px 16px;border-bottom:1px solid var(--line);background:rgba(20,40,30,.4)}
+.lights{display:flex;gap:6px}.lights i{width:10px;height:10px;border-radius:50%;display:block}
+.lights i:nth-child(1){background:#e06b6b}.lights i:nth-child(2){background:var(--gold)}.lights i:nth-child(3){background:var(--grn)}
+.cbar .tag{margin-left:auto;font-size:10.5px;color:var(--dim);letter-spacing:.5px}
+.ctog{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--dim);cursor:pointer;user-select:none}
+.sw{width:34px;height:18px;border-radius:999px;background:#1d3a2c;position:relative;transition:.2s}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--dim);transition:.2s}
+.ctog.on .sw{background:var(--grn)}.ctog.on .sw::after{left:18px;background:#04241a}
+.cbody{padding:16px;font-size:12.5px;line-height:1.8;min-height:150px;color:#bfe6d4}
+.cbody .t{color:var(--dim)}.cbody .u{color:var(--grn2);font-weight:700}.cbody .m{color:#dff7ec}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <div class="brand"><span class="seed"></span> Organic Intelligence</div>
+  <div class="navlinks">
+    <a href="#units">Units</a>
+    <a href="#personas">For You</a>
+    <a href="#why">Why Different</a>
+    <a href="#coming">What's Coming</a>
+    <a href="#cta" class="navcta">See it live</a>
+  </div>
+</div></nav>
+
+<header>
+  <canvas id="living"></canvas>
+  <div class="wrap">
+    <span class="chip">🌱 A new category — not automation</span>
+    <h1>A living team that <span class="g">grows with you.</span></h1>
+    <p class="sub">Not a workflow tool. Not "set it and forget it." Organic Intelligence is a privately-run team of AI units — Finance, Operations, Sales, Marketing, Creative, Support and more — that work 24/7 on the channels you already use, stay a step ahead of you, and get sharper every single week.</p>
+    <div class="herobtns">
+      <button class="btn primary" onclick="document.getElementById('units').scrollIntoView()">Meet the units</button>
+      <button class="btn ghost" onclick="document.getElementById('why').scrollIntoView()">Why it's different →</button>
+    </div>
+    <div class="herostats">
+      <div><b>9+</b><span>SPECIALIST UNITS</span></div>
+      <div><b>24/7</b><span>WORKS WHILE YOU SLEEP</span></div>
+      <div><b>1</b><span>SHARED MEMORY THAT COMPOUNDS</span></div>
+      <div><b>0</b><span>SENT WITHOUT YOUR APPROVAL</span></div>
+    </div>
+
+    <div class="ticker">
+      <div class="lbl">LIVE · WHILE YOU SLEEP</div>
+      <div class="track" id="track"></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- SHIFT -->
+<section>
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">The shift</span>
+      <h2>Automation breaks. Organic intelligence grows.</h2>
+      <p>Automations are brittle: built once, blind to change, forgetful by design. A living team is the opposite — it remembers, adapts, and compounds.</p>
+    </div>
+    <div class="shift">
+      <div class="card old">
+        <h3>✕ Brittle Automation</h3>
+        <ul>
+          <li><span class="mk">✕</span> Built once, then slowly rots as reality changes</li>
+          <li><span class="mk">✕</span> Forgets everything between runs — no memory</li>
+          <li><span class="mk">✕</span> Only reacts to triggers you predicted in advance</li>
+          <li><span class="mk">✕</span> One tool, one task, in its own silo</li>
+          <li><span class="mk">✕</span> You maintain it. It never improves itself.</li>
+        </ul>
+      </div>
+      <div class="card new">
+        <h3>🌱 Organic Intelligence</h3>
+        <ul>
+          <li><span class="mk">✓</span> Adapts as your business changes — new units spin up on demand</li>
+          <li><span class="mk">✓</span> One shared memory the whole team builds on, for years</li>
+          <li><span class="mk">✓</span> Stays a step ahead — surfaces things before you ask</li>
+          <li><span class="mk">✓</span> Units hand off to each other; a signal in one fires action in another</li>
+          <li><span class="mk">✓</span> Gets sharper every week. It compounds.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UNITS -->
+<section id="units">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">The team</span>
+      <h2>Functional units — each a specialist in its domain.</h2>
+      <p>You don't manage a pile of bots. You have departments, each led by a head with specialists beneath, each owning real outcomes. Here's the standing roster.</p>
+    </div>
+    <div class="ugrid" id="ugrid"></div>
+    <div class="unitnote">…and <b>new units spin up as you grow</b> — Compliance &amp; Risk, Procurement, Legal, HR — staffed to the shape of <i>your</i> business.</div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PERSONAS -->
+<section id="personas">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Tuned to you</span>
+      <h2>The same team, shaped around your world.</h2>
+      <p>The units that matter most — and the moves your team makes <i>before you ask.</i> Pick your seat.</p>
+    </div>
+    <div class="ptabs" id="ptabs"></div>
+    <div id="ppanels"></div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- WHY -->
+<section id="why">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Why it's qualitatively different</span>
+      <h2>Not more bots. A different kind of mind.</h2>
+      <p>Anyone can wire up more agents. The difference is what holds them together — memory, anticipation, and compounding judgment.</p>
+    </div>
+    <div class="pillars" id="pillars"></div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- COMING -->
+<section id="coming">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">What's coming</span>
+      <h2>It keeps getting deeper.</h2>
+      <p>The team you hire today is the weakest it will ever be. Here's what's already on the way.</p>
+    </div>
+    <div class="road">
+      <div class="rcard"><span class="st live">LIVE</span><h4>On your channels</h4><p>Works in Slack, WhatsApp, email and text today — no new portal to learn.</p></div>
+      <div class="rcard"><span class="st live">LIVE</span><h4>Always-on recon</h4><p>Daily autonomous scans surface opportunity and risk before your first coffee.</p></div>
+      <div class="rcard"><span class="st soon">NEAR-READY</span><h4>Live voice calling</h4><p>Your team picks up the phone — books, confirms, follows up. In the pipeline now.</p></div>
+      <div class="rcard"><span class="st next">GROWING</span><h4>New units on demand</h4><p>As you scale, the org chart expands — staffed to the shape of your business.</p></div>
+    </div>
+
+    <!-- cosmetic console -->
+    <div class="console">
+      <div class="cbar">
+        <div class="lights"><i></i><i></i><i></i></div>
+        <span class="tag">organic-intelligence · live feed</span>
+        <div class="ctog" id="ctog"><span>SIMULATED</span><span class="sw"></span></div>
+      </div>
+      <div class="cbody" id="cbody"></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- TRUST + CTA -->
+<section id="cta">
+  <div class="wrap">
+    <div class="trust">
+      <span class="lk">🔒</span>
+      <div style="flex:1;min-width:260px">
+        <b>You stay in command.</b> <span class="soft">The team drafts, monitors, and prepares around the clock — but nothing goes out the door without your word. Every action is logged, every decision is yours.</span>
+      </div>
+    </div>
+    <div class="finalcta">
+      <h2>Stop hiring tools. Start growing a team.</h2>
+      <p>A living team that remembers everything, stays a step ahead, and compounds — working while you sleep, on the channels you already use.</p>
+      <button class="btn primary" style="font-size:16px;padding:15px 30px" onclick="document.getElementById('cbody').scrollIntoView()">Watch the team work →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Organic Intelligence — a living team that grows with you. · Built for operators, investors &amp; founders. · Nothing sent without your approval.</div>
+</footer>
+
+<script>
+/* ---- living network backdrop ---- */
+const cv=document.getElementById('living'),cx=cv.getContext('2d');let W,H,nodes=[];
+function size(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;build()}
+function build(){nodes=[];const n=Math.min(46,Math.floor(W/30));for(let i=0;i<n;i++){nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*2+1})}}
+function draw(){cx.clearRect(0,0,W,H);
+  // concentric growth rings
+  const cxX=W*0.78,cxY=H*0.30;
+  for(let k=0;k<5;k++){const rr=60+k*60+Math.sin(Date.now()/1400+k)*8;cx.beginPath();cx.arc(cxX,cxY,rr,0,7);cx.strokeStyle='rgba(52,211,153,'+(0.10-k*0.015)+')';cx.lineWidth=1;cx.stroke();}
+  for(let i=0;i<nodes.length;i++){const a=nodes[i];a.x+=a.vx;a.y+=a.vy;
+    if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;
+    for(let j=i+1;j<nodes.length;j++){const b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
+      if(d<130){cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.strokeStyle='rgba(110,231,183,'+(0.13*(1-d/130))+')';cx.lineWidth=.7;cx.stroke();}}
+    cx.beginPath();cx.arc(a.x,a.y,a.r,0,7);cx.fillStyle='rgba(110,231,183,.5)';cx.fill();}
+  requestAnimationFrame(draw);}
+window.addEventListener('resize',size);size();draw();
+
+/* ---- data ---- */
+const UNITS=[
+ ['💰','Finance','Controller',['FP&A','AR/AP','Compliance Acct'],'13-week cashflow &amp; runway, margin-by-SKU, invoicing &amp; collections, funding scenarios — audit-ready.','"No more surprise zero."'],
+ ['⚙️','Operations','Operations Lead',['Scheduler','Inventory','SOP Librarian','Quality'],'Daily ops plan, live ETA/temp/compliance monitoring, enforced SOPs, carrier scorecards &amp; reroutes.','"Chaos to calm — the day runs itself."'],
+ ['🎯','Sales &amp; Lead Gen','Pipeline Director',['SDR','RevOps','Pricing Desk'],'Signal-based prospecting, multi-channel outreach, lead scoring, quote drafting, relentless follow-through.','"A quiet pipeline becomes booked calendars."'],
+ ['📣','Marketing','Growth Lead',['Content','Performance','SEO / Email'],'Content calendar &amp; drafts, paid campaigns &amp; ROAS, landing-page experiments, brand monitoring.','"Your market presence runs continuously."'],
+ ['🎨','Creative Studio','Creative Director',['Copy','Design','Video'],'On-brief assets, brand-kit memory that never drifts, A/B variants at scale, fast revisions with change logs.','"\'Make it look good\' becomes \'already shipped.\'"'],
+ ['💬','Customer Support','CX Manager',['Triage','KB Author','Retention'],'24/7 triage across email, chat, SMS, WhatsApp &amp; Slack; smart routing; churn &amp; sentiment detection.','"Faster resolutions, fewer escalations."'],
+ ['📐','Project Delivery','Delivery Lead',['Planner','Risk Mgr','Resourcing'],'Scoping &amp; dependency maps, standups &amp; burndowns, risk registers, post-mortems that become playbooks.','"Work stops slipping."'],
+ ['🔭','Research &amp; Intelligence','Recon Lead',['Market Scout','Competitor','Regulatory'],'Daily opportunity/risk briefs, threshold watchlists, competitive teardowns, regulatory forecasting.','"You stop reacting and start pre-empting."'],
+ ['📊','Data &amp; Insights','Data Steward',['BI Analyst','Data Engineer'],'Unified metrics layer, KPI dashboards with anomaly detection, experiment design, governance &amp; lineage.','"One truth, not five dashboards arguing."'],
+];
+const ug=document.getElementById('ugrid');
+UNITS.forEach(u=>{const d=document.createElement('div');d.className='unit';
+ d.innerHTML=`<div class="ic">${u[0]}</div><h4>${u[1]}</h4><div class="head">Led by · ${u[2]}</div>
+ <div class="spec">${u[3].map(s=>`<span>${s}</span>`).join('')}</div>
+ <div class="caps">${u[4]}</div><div class="pain">${u[5]}</div>`;ug.appendChild(d);});
+
+const PERS=[
+ {k:'sea',ico:'🐟',name:'Seafood Executive',who:'Established operator · ops-heavy · thin margins · compliance-bound',
+  units:['Operations','Compliance &amp; Risk','Finance','Research','Data &amp; Insights'],
+  pains:['Margin erosion from delays, spoilage &amp; quota shocks','Paper compliance that breaks under audit','Data fragmented across boats, plants, brokers &amp; retailers'],
+  pro:['<b>Overnight:</b> a fishery just closed — the team simulates the margin hit, drafts buyer notices and proposes alternate SKUs &amp; routes by sunrise.','<b>4am:</b> compiles cold-chain exceptions + corrective actions and queues an audit-ready compliance packet before the plant opens.']},
+ {k:'vc',ico:'💼',name:'Venture Capitalist',who:'Deal flow · diligence · portfolio support · pattern-matching',
+  units:['Research &amp; Intelligence','Data &amp; Insights','Finance','Sales (sourcing)','Project Delivery'],
+  pains:['Noisy inbound hiding the real outliers','Slow, inconsistent diligence burning partner time','Portfolio drift invisible until the board meeting'],
+  pro:['<b>Sunday night:</b> a Partner-Meeting brief lands — top 10 sourced prospects, 3 portfolio risks, 5 wins, every memo linked.','<b>Before an intro call:</b> a founder dossier with 5 incisive, metric-tailored questions is already in your inbox.']},
+ {k:'found',ico:'🚀',name:'Entrepreneur / Founder',who:'Wears every hat · no time · needs leverage now',
+  units:['Sales &amp; Lead Gen','Marketing','Creative Studio','Project Delivery','Finance','Support'],
+  pains:['No pipeline, no time, no process','Creative bottlenecks on trivial assets','Context lost between product, sales &amp; support'],
+  pro:['Books <b>8 customer-discovery calls</b> for next week — with scripts and consent notes drafted.','Drafts your <b>investor update</b> — traction, highlights and the ask — ready to send before you think to write it.']},
+];
+const pt=document.getElementById('ptabs'),pp=document.getElementById('ppanels');
+PERS.forEach((p,i)=>{
+ const t=document.createElement('div');t.className='ptab'+(i==0?' active':'');t.innerHTML=`<span>${p.ico}</span> ${p.name}`;t.onclick=()=>sel(i);pt.appendChild(t);
+ const pn=document.createElement('div');pn.className='ppanel'+(i==0?' show':'');pn.id='pp'+i;
+ pn.innerHTML=`<div class="ptop"><h3>${p.ico} ${p.name}</h3><div class="who">${p.who}</div>
+   <div class="punits">${p.units.map(u=>`<span>${u}</span>`).join('')}</div></div>
+   <div class="pbody">
+     <div class="pcol pain"><h5>Where it hurts</h5><ul>${p.pains.map(x=>`<li><span class="mk">✕</span> ${x}</li>`).join('')}</ul></div>
+     <div class="pcol proact"><h5>Moves it makes before you ask</h5><ul>${p.pro.map(x=>`<li><span class="mk">→</span> <span>${x}</span></li>`).join('')}</ul></div>
+   </div>`;pp.appendChild(pn);
+});
+function sel(i){document.querySelectorAll('.ptab').forEach((e,j)=>e.classList.toggle('active',i==j));
+ document.querySelectorAll('.ppanel').forEach((e,j)=>e.classList.toggle('show',i==j));}
+
+const PILL=[
+ ['01','A living team, not brittle automation','It adapts as your business changes and spins up new specialists as you scale — the opposite of a set-once script that quietly rots.'],
+ ['02','Always-on recon','It scans for opportunity and risk every day and surfaces what matters before you ask — working through nights, weekends and Shabbat while you recharge.'],
+ ['03','Native to your channels — voice next','It meets you in Slack, WhatsApp, email and text. No new dashboard. Live voice calling is in the pipeline, so it will pick up the phone when needed.'],
+ ['04','Handoffs that compound','Every unit shares one memory graph — a signal in Finance fires action in Ops, and each cycle sharpens the next. Operational IQ that rises over time.'],
+ ['05','Guardrails by design','Approvals, logs and policy constraints are first-class, not afterthoughts. You see what it did, why, and exactly what changed — and nothing ships without your word.'],
+];
+const pc=document.getElementById('pillars');
+// moat pillar first (full width)
+const moat=document.createElement('div');moat.className='pill moat';
+moat.innerHTML=`<div class="mleft"><span class="badge">THE MOAT</span>
+ <h4>Memory that resists context-collapse.</h4>
+ <p>Most AI silently forgets — and worse, it can <i>fabricate</i> a confirmation that never happened when its context overflows. We engineered against exactly that: critical state is externalized and your constraints are pinned structurally, re-injected every single turn. It never quietly drops what matters, and it never invents a "yes" you didn't give.</p></div>
+ <div class="moatvis">
+   <div class="row"><span class="dot r"></span> Typical AI: context overflows → silent memory loss</div>
+   <div class="row"><span class="dot r"></span> Typical AI: invents a confirmation to fill the gap</div>
+   <div class="row"><span class="dot g"></span> Ours: critical state externalized &amp; durable</div>
+   <div class="row"><span class="dot g"></span> Ours: constraints pinned, re-injected every turn</div>
+   <div class="row"><span class="dot g"></span> Ours: uncertainty stays marked as uncertainty</div>
+ </div>`;
+pc.appendChild(moat);
+PILL.forEach(p=>{const d=document.createElement('div');d.className='pill';
+ d.innerHTML=`<div class="n">${p[0]}</div><h4>${p[1]}</h4><p>${p[2]}</p>`;pc.appendChild(d);});
+
+/* ---- ticker ---- */
+const FEED=['<b>Research</b> flagged a competitor price cut — Marketing drafting a counter','<b>Finance</b> ran your 13-week cashflow — runway healthy, one vendor overdue','<b>Support</b> resolved 14 tickets overnight · CSAT 4.8','<b>Ops</b> rerouted a delayed shipment before the deadline slipped','<b>Sales</b> queued 9 warm prospects from this week\'s signals','<b>Creative</b> shipped 6 ad variants for tomorrow\'s test','<b>Intelligence</b> brief ready: 3 risks, 5 opportunities','<b>Data</b> caught a 22% bounce-rate spike on the pricing page'];
+document.getElementById('track').innerHTML=(FEED.concat(FEED)).map(f=>`<span>● ${f}</span>`).join('');
+
+/* ---- console (cosmetic; LIVE = simulated richer cadence, never a real endpoint in public) ---- */
+const cbody=document.getElementById('cbody'),ctog=document.getElementById('ctog');let live=false,ci=0;
+const SCRIPT=[
+ ['t','$ wake → standing recon sweep'],
+ ['u','Research','scanning 6 sources · markets, competitors, regs…'],
+ ['m','  ↳ 3 risks, 5 opportunities compiled → brief queued'],
+ ['u','Finance','13-week cashflow refreshed · runway 11 mo'],
+ ['m','  ↳ flag: Vendor #4 invoice 6 days overdue → draft nudge'],
+ ['u','Ops','shipment BOS-118 delayed · rerouting…'],
+ ['m','  ↳ new ETA holds the deadline ✓'],
+ ['u','Sales','9 warm prospects scored from week signals'],
+ ['t','— all drafts held for your approval —'],
+];
+function step(){const l=SCRIPT[ci%SCRIPT.length];const div=document.createElement('div');
+ if(l[0]==='t')div.innerHTML=`<span class="t">${l[1]}</span>`;
+ else if(l[0]==='u')div.innerHTML=`<span class="u">▸ ${l[1]}</span> <span class="m">${l[2]}</span>`;
+ else div.innerHTML=`<span class="m">${l[1]}</span>`;
+ cbody.appendChild(div);while(cbody.children.length>9)cbody.removeChild(cbody.firstChild);ci++;}
+for(let i=0;i<6;i++)step();
+let timer=setInterval(step,2600);
+ctog.onclick=()=>{live=!live;ctog.classList.toggle('on',live);ctog.firstChild.textContent=live?'LIVE':'SIMULATED';
+ clearInterval(timer);timer=setInterval(step,live?1200:2600);};
+</script>
+</body>
+</html>
